@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import EditPost from './Posts/EditPost';
 import ListView from './Categories/ListView';
 import PostDetail from './Posts/PostDetail';
+import { downloadCategoriesStart } from './Categories/actions';
 
 class App extends Component {
     componentDidMount() {
-        // TODO Populate store from the API
+        this.props.dispatch( downloadCategoriesStart() );
     }
 
     render() {
@@ -56,4 +58,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default connect()( App );
