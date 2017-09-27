@@ -13,11 +13,13 @@ class NavBar extends Component {
                     </div>
                     <div id="navbar-main">
                         <ul className="nav navbar-nav">
-                            { this.props.categories.map( category => (
-                                <BootstrapNavLink key={ category.path } to={ `/cat/${category.path}` }>
-                                    { category.name }
-                                </BootstrapNavLink>
-                            ) ) }
+                            { this.props.categories.map( category => {
+                                const name = category.get( 'name' );
+                                const path = category.get( 'path' );
+                                return (
+                                    <BootstrapNavLink key={ path } to={ `/cat/${path}` }>{ name }</BootstrapNavLink>
+                                );
+                            } ) }
                         </ul>
                     </div>
                 </div>

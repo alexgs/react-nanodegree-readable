@@ -24,13 +24,10 @@ class App extends Component {
 
     render() {
         // TODO: Fix paths to match what is in the rubric
-        // return (
-        //     <div>hello world</div>
-        // );
         return (
             <BrowserRouter>
                 <div className="readable-app">
-                    {/*<NavBar categories={ this.props.categories } />*/}
+                    <NavBar categories={ this.props.categories } />
                     <div className="container">
                         <div className="page-header"><h1>Readable</h1></div>
                         <Route
@@ -63,4 +60,4 @@ class App extends Component {
     }
 }
 
-export default connect( state => ({ categories: state.categories }) )( App );
+export default connect( state => ({ categories: state.get( 'categories' ) }) )( App );
