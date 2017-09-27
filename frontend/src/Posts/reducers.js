@@ -6,7 +6,7 @@ const defaultState = Immutable.List();
 const postsReducer = function(state=defaultState, action ) {
     switch( action.type ) {
         case DOWNLOAD_POSTS_COMPLETE:
-            return action.data.posts ? Immutable.List( action.data.posts ) : defaultState;
+            return action.data.posts ? Immutable.fromJS( action.data.posts ) : defaultState;
         default:
             return state;
     }
