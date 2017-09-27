@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
 import categoriesReducer from './Categories/reducers';
 import postsReducer from './Posts/reducers';
 

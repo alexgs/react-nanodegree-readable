@@ -1,5 +1,3 @@
-'use strict';
-
 // Project rubric: https://review.udacity.com/#!/rubrics/1017/view
 
 import PropTypes from 'prop-types';
@@ -26,10 +24,13 @@ class App extends Component {
 
     render() {
         // TODO: Fix paths to match what is in the rubric
+        // return (
+        //     <div>hello world</div>
+        // );
         return (
             <BrowserRouter>
                 <div className="readable-app">
-                    <NavBar categories={ this.props.categories } />
+                    {/*<NavBar categories={ this.props.categories } />*/}
                     <div className="container">
                         <div className="page-header"><h1>Readable</h1></div>
                         <Route
