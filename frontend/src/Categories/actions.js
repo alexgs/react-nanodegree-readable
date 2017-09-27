@@ -11,9 +11,7 @@ export const downloadCategoriesComplete = function( data ) {
 export const downloadCategoriesStart = function() {
     return function( dispatch ) {
         return fetchCategories()
-            .then( payload => {
-                dispatch( downloadCategoriesComplete( payload ) )
-            } )
+            .then( payload => dispatch( downloadCategoriesComplete( payload ) ) )
             .catch( error => console.log( `>>> ERROR: ${error} <<<` ) );
     };
 };

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
@@ -8,6 +9,13 @@ import PostDetail from './Posts/PostDetail';
 import { downloadCategoriesStart } from './Categories/actions';
 
 class App extends Component {
+    static propTypes = {
+        categories: PropTypes.arrayOf( PropTypes.shape( {
+            name: PropTypes.string.isRequired,
+            path: PropTypes.string.isRequired
+        } ) ).isRequired
+    };
+
     componentDidMount() {
         this.props.dispatch( downloadCategoriesStart() );
     }
