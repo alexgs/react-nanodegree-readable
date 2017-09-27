@@ -1,9 +1,8 @@
-'use strict';
-
 // Project rubric: https://review.udacity.com/#!/rubrics/1017/view
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 import EditPost from './Posts/EditPost';
@@ -14,7 +13,7 @@ import { downloadCategoriesStart } from './Categories/actions';
 
 class App extends Component {
     static propTypes = {
-        categories: PropTypes.arrayOf( PropTypes.shape( {
+        categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
             name: PropTypes.string.isRequired,
             path: PropTypes.string.isRequired
         } ) ).isRequired
@@ -62,4 +61,4 @@ class App extends Component {
     }
 }
 
-export default connect( state => ({ categories: state.categories }) )( App );
+export default connect( state => ({ categories: state.get( 'categories' ) }) )( App );

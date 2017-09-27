@@ -1,11 +1,12 @@
+import Immutable from 'immutable';
 import { DOWNLOAD_POSTS_COMPLETE } from '../constants';
 
-const defaultState = [];
+const defaultState = Immutable.List();
 
 const postsReducer = function(state=defaultState, action ) {
     switch( action.type ) {
         case DOWNLOAD_POSTS_COMPLETE:
-            return action.data.posts ? action.data.posts : defaultState;
+            return action.data.posts ? Immutable.fromJS( action.data.posts ) : defaultState;
         default:
             return state;
     }

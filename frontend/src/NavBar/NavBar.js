@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import BootstrapNavLink from './BootstrapNavLink';
 
 class NavBar extends Component {
+    static propTypes = {
+        categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
+            name: PropTypes.string.isRequired,
+            path: PropTypes.string.isRequired
+        } ) ).isRequired
+    };
+
     render() {
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -13,11 +21,13 @@ class NavBar extends Component {
                     </div>
                     <div id="navbar-main">
                         <ul className="nav navbar-nav">
-                            { this.props.categories.map( category => (
-                                <BootstrapNavLink key={ category.path } to={ `/cat/${category.path}` }>
-                                    { category.name }
-                                </BootstrapNavLink>
-                            ) ) }
+                            { this.props.categories.map( category => {
+                                const name = category.get( 'name' );
+                                const path = category.get( 'path' );
+                                return (
+                                    <BootstrapNavLink key={ path } to={ `/cat/${path}` }>{ name }</BootstrapNavLink>
+                                );
+                            } ) }
                         </ul>
                     </div>
                 </div>
@@ -25,12 +35,5 @@ class NavBar extends Component {
         );
     }
 }
-
-NavBar.propTypes = {
-    categories: PropTypes.arrayOf( PropTypes.shape( {
-        name: PropTypes.string,
-        path: PropTypes.string
-    } ) ).isRequired
-};
 
 export default NavBar;
