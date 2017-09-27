@@ -1,3 +1,7 @@
+'use strict';
+
+// Project rubric: https://review.udacity.com/#!/rubrics/1017/view
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -21,6 +25,7 @@ class App extends Component {
     }
 
     render() {
+        // TODO: Fix paths to match what is in the rubric
         return (
             <BrowserRouter>
                 <div className="readable-app">
