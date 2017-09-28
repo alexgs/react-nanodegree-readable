@@ -1,14 +1,13 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { CATEGORY_ALL, STORE_CATEGORIES, STORE_POSTS_BY_CATEGORY, STORE_POSTS_DATA } from '../constants';
 import { downloadPostsStart } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
 
-// TODO Does this update correctly as a `PureComponent`?
-class ListView extends Component {
+class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
         categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
@@ -76,12 +75,10 @@ class ListView extends Component {
         return (
             <div>
                 <h2>{ title }</h2>
-                <pre>{ JSON.stringify( postIds.toJSON(), null, 4 ) }</pre>
                 { postSummaries }
             </div>
         );
     }
-
 }
 
 export default connect( state => ({
