@@ -10,7 +10,7 @@ import ListView from './Categories/ListView';
 import NavBar from './NavBar/NavBar';
 import PostDetail from './Posts/PostDetail';
 import { downloadCategoriesStart } from './Categories/actions';
-import { STORE_CATEGORIES } from './constants';
+import { CATEGORY_ALL, STORE_CATEGORIES } from './constants';
 
 class App extends Component {
     static propTypes = {
@@ -34,7 +34,7 @@ class App extends Component {
                         <div className="page-header"><h1>Readable</h1></div>
                         <Route
                             path="/" exact
-                            render={ () => ( <ListView category="all" /> ) }
+                            render={ () => ( <ListView category={ CATEGORY_ALL } /> ) }
                         />
                         <Route
                             path="/cat/:category"
