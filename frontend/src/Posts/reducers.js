@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import { DOWNLOAD_POSTS_COMPLETE } from '../constants';
 
 const postsByCategoryDefaultState = Immutable.Map();
-const postsDataDefaultState = Immutable.List();
+const postsDataDefaultState = Immutable.Map();
 
 export const postsByCategoryReducer = function( state=postsByCategoryDefaultState, action ) {
     switch( action.type ) {
@@ -28,8 +28,11 @@ export const postsByCategoryReducer = function( state=postsByCategoryDefaultStat
 export const postsDataReducer = function( state=postsDataDefaultState, action ) {
     switch( action.type ) {
         case DOWNLOAD_POSTS_COMPLETE:
-            // TODO process a list of posts
-            return action.data.posts ? Immutable.fromJS( action.data.posts ) : postsDataDefaultState;
+            return state.withMutations( mutableState => {
+                action.data.posts.forEach( post => {
+                    mutableState.set( post.id, post );          // Add or update post data
+                } );
+            } );
         default:
             return state;
     }
