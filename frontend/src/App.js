@@ -10,6 +10,7 @@ import ListView from './Categories/ListView';
 import NavBar from './NavBar/NavBar';
 import PostDetail from './Posts/PostDetail';
 import { downloadCategoriesStart } from './Categories/actions';
+import { STORE_CATEGORIES } from './constants';
 
 class App extends Component {
     static propTypes = {
@@ -61,4 +62,4 @@ class App extends Component {
     }
 }
 
-export default connect( state => ({ categories: state.get( 'categories' ) }) )( App );
+export default connect( state => ({ categories: state.get( STORE_CATEGORIES ) }) )( App );
