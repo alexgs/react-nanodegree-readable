@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AUTHORIZATION_KEY } from './constants';
+import { AUTHORIZATION_KEY, ERROR_SOURCE_API } from './constants';
 
 export const fetchCategories = function () {
     return getWorker( '/categories' );
@@ -40,7 +40,9 @@ const getWorker = function( path, options={} ) {
             if ( response.ok ) {
                 return response.json();
             } else {
-                throw new Error( `Path ${path} returned status code ${response.status }` );
+                const error = new Error( `Path ${path} returned status code ${response.status }` );
+                error.source = ERROR_SOURCE_API;
+                throw error;
             }
         } );
 

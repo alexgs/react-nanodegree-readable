@@ -1,5 +1,6 @@
-import { DOWNLOAD_CATEGORIES_COMPLETE } from '../constants';
 import { fetchCategories } from '../api';
+import { thunkPromiseChainErrorHandler } from '../utils';
+import { DOWNLOAD_CATEGORIES_COMPLETE, ERROR_SOURCE_API } from '../constants';
 
 export const downloadCategoriesComplete = function( data ) {
     return {
@@ -12,6 +13,6 @@ export const downloadCategoriesStart = function() {
     return function( dispatch ) {
         return fetchCategories()
             .then( payload => dispatch( downloadCategoriesComplete( payload ) ) )
-            .catch( error => console.log( `>>> ERROR: ${error} <<<` ) );
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
     };
 };
