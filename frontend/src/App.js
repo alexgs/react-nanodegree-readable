@@ -10,7 +10,7 @@ import ListView from './Categories/ListView';
 import NavBar from './NavBar/NavBar';
 import PostDetail from './Posts/PostDetail';
 import { downloadCategoriesStart } from './Categories/actions';
-import PageHeader from './PageHeader';
+import PageHeader from './General/PageHeader';
 import { CATEGORY_ALL, STORE_CATEGORIES } from './constants';
 
 class App extends Component {

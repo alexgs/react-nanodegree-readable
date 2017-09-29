@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
+import './PageHeader.css';
 
 const pageHeaderStyle = {
     color: 'initial'
