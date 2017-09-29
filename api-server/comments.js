@@ -22,6 +22,26 @@ const defaultData = {
     voteScore: -5,
     deleted: false,
     parentDeleted: false
+  },
+  "07515643-cb88-472a-a111-7a7d0feff550": {
+    id: "07515643-cb88-472a-a111-7a7d0feff550",
+    parentId: "6ni6ok3ym7mf1p33lnez",
+    timestamp: 1506695317276,
+    body: "I shot a man in Reno just to watch him die.",
+    author: "JohnnyCash",
+    voteScore: -3,
+    deleted: false,
+    parentDeleted: false
+  },
+  "52ebfaba-0d09-487d-8bff-a2a348017de1": {
+    id: "52ebfaba-0d09-487d-8bff-a2a348017de1",
+    parentId: "6ni6ok3ym7mf1p33lnez",
+    timestamp: 1506698917408,
+    body: "I love green eggs and ham.",
+    author: "Sam-I-am",
+    voteScore: 2,
+    deleted: false,
+    parentDeleted: false
   }
 }
 

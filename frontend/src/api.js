@@ -5,6 +5,10 @@ export const fetchCategories = function () {
     return getWorker( '/categories' );
 };
 
+export const fetchComments = function( postId ) {
+    return getWorker( '/posts/' + makeToken( 'postId') + '/comments', { postId } );
+};
+
 export const fetchPosts = function() {
     return getWorker( '/posts' );
 };

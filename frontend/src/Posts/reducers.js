@@ -1,4 +1,6 @@
 import Immutable from 'immutable';
+import store from '../store';
+import { downloadCommentsStart } from '../Comments/actions';
 import { DOWNLOAD_POSTS_COMPLETE } from '../constants';
 
 const postsByCategoryDefaultState = Immutable.Map();
@@ -31,6 +33,7 @@ export const postsDataReducer = function( state=postsDataDefaultState, action ) 
             return state.withMutations( mutableState => {
                 action.data.posts.forEach( post => {
                     mutableState.set( post.id, Immutable.fromJS( post ) );          // Add or update post data
+                    store.dispatch( downloadCommentsStart( post.id ) );
                 } );
             } );
         default:
