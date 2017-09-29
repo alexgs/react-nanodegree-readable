@@ -7,6 +7,17 @@ import { CATEGORY_ALL, STORE_CATEGORIES, STORE_POSTS_BY_CATEGORY, STORE_POSTS_DA
 import { downloadPostsStart } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
 
+const categoryNameStyle = {
+    color: 'maroon',
+    fontSize: '120%',
+};
+
+const titleStyle = {
+    fontSize: 20,
+    fontWeight: 600,
+    textTransform: 'uppercase'
+};
+
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
@@ -52,7 +63,7 @@ class ListView extends PureComponent {
             const categoryName = this.props.categories.size === 0 ? '' : this.props.categories
                 .find( value => value.get( 'path' ) === categoryId )
                 .get( 'name' );
-            title = `Posts in the "${categoryName}" Category`;
+            title = <span>Posts in the <span style={ categoryNameStyle }>{ categoryName }</span> Category</span>;
         }
 
         const postSummaries = postIds.map( id => {
@@ -74,7 +85,7 @@ class ListView extends PureComponent {
 
         return (
             <div>
-                <h2>{ title }</h2>
+                <h2 style={ titleStyle }>{ title }</h2>
                 { postSummaries }
             </div>
         );
