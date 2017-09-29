@@ -1,14 +1,27 @@
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { CATEGORY_ALL, STORE_CATEGORIES, STORE_POSTS_BY_CATEGORY, STORE_POSTS_DATA } from '../constants';
 import { downloadPostsStart } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
 
-// TODO Does this update correctly as a `PureComponent`?
-class ListView extends Component {
+const categoryNameStyle = {
+    color: 'maroon',
+    fontSize: '120%',
+};
+
+const titleStyle = {
+    fontSize: 20,
+    fontWeight: 600,
+    marginTop: 0,
+    textTransform: 'uppercase'
+};
+
+// TODO (1) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum) and the
+// TODO     sort works properly.
+class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
         categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
@@ -43,7 +56,7 @@ class ListView extends Component {
         // Get a title for the page and a list of post IDs to display
         if ( categoryId === CATEGORY_ALL ) {
             postIds = postData.keySeq();
-            title = 'All Posts';
+            title = <span><span style={ categoryNameStyle }>All</span> Posts</span>;
         } else {
             postIds = this.props[ STORE_POSTS_BY_CATEGORY ].get( categoryId );
             if ( !postIds ) {
@@ -53,7 +66,7 @@ class ListView extends Component {
             const categoryName = this.props.categories.size === 0 ? '' : this.props.categories
                 .find( value => value.get( 'path' ) === categoryId )
                 .get( 'name' );
-            title = `Posts in the "${categoryName}" Category`;
+            title = <span>Posts in the <span style={ categoryNameStyle }>{ categoryName }</span> Category</span>;
         }
 
         const postSummaries = postIds.map( id => {
@@ -75,13 +88,15 @@ class ListView extends Component {
 
         return (
             <div>
-                <h2>{ title }</h2>
-                <pre>{ JSON.stringify( postIds.toJSON(), null, 4 ) }</pre>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h2 style={ titleStyle }>{ title }</h2>
+                    </div>
+                </div>
                 { postSummaries }
             </div>
         );
     }
-
 }
 
 export default connect( state => ({

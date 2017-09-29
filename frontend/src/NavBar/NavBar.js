@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import BootstrapNavLink from './BootstrapNavLink';
+import BrandLink from './BrandLink';
 
 class NavBar extends Component {
     static propTypes = {
@@ -17,7 +17,7 @@ class NavBar extends Component {
             <nav className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header">
-                        <Link className="navbar-brand" to="/">Readable</Link>
+                        <BrandLink to="/">Readable</BrandLink>
                     </div>
                     <div id="navbar-main">
                         <ul className="nav navbar-nav">

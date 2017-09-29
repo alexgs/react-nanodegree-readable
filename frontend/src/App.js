@@ -10,6 +10,7 @@ import ListView from './Categories/ListView';
 import NavBar from './NavBar/NavBar';
 import PostDetail from './Posts/PostDetail';
 import { downloadCategoriesStart } from './Categories/actions';
+import PageHeader from './General/PageHeader';
 import { CATEGORY_ALL, STORE_CATEGORIES } from './constants';
 
 class App extends Component {
@@ -31,7 +32,7 @@ class App extends Component {
                 <div className="readable-app">
                     <NavBar categories={ this.props.categories } />
                     <div className="container">
-                        <div className="page-header"><h1>Readable</h1></div>
+                        <PageHeader />
                         <Route
                             path="/" exact
                             render={ () => ( <ListView category={ CATEGORY_ALL } /> ) }
