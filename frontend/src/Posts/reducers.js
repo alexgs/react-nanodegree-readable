@@ -30,7 +30,7 @@ export const postsDataReducer = function( state=postsDataDefaultState, action ) 
         case DOWNLOAD_POSTS_COMPLETE:
             return state.withMutations( mutableState => {
                 action.data.posts.forEach( post => {
-                    mutableState.set( post.id, post );          // Add or update post data
+                    mutableState.set( post.id, Immutable.fromJS( post ) );          // Add or update post data
                 } );
             } );
         default:

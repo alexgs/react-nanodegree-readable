@@ -73,15 +73,15 @@ class ListView extends PureComponent {
             const data = postData.get( id );
             return (
                 <PostSummary
-                    key={ data.id }
-                    author={ data.author }
-                    body={ data.body }
-                    category={ data.category }
-                    deleted={ data.deleted }
-                    id={ data.id }
-                    timestamp={ data.timestamp }
-                    title={ data.title }
-                    voteScore={ data.voteScore }
+                    key={ data.get( 'id' ) }
+                    author={ data.get( 'author' ) }
+                    body={ data.get( 'body' ) }
+                    category={ data.get( 'category' ) }
+                    deleted={ data.get( 'deleted' ) }
+                    id={ data.get( 'id' ) }
+                    timestamp={ data.get( 'timestamp' ) }
+                    title={ data.get( 'title' ) }
+                    voteScore={ data.get( 'voteScore' ) }
                 />
             );
         } );
