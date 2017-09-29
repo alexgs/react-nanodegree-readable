@@ -15,9 +15,12 @@ const categoryNameStyle = {
 const titleStyle = {
     fontSize: 20,
     fontWeight: 600,
+    marginTop: 0,
     textTransform: 'uppercase'
 };
 
+// TODO (1) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum) and the
+// TODO     sort works properly.
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
@@ -53,7 +56,7 @@ class ListView extends PureComponent {
         // Get a title for the page and a list of post IDs to display
         if ( categoryId === CATEGORY_ALL ) {
             postIds = postData.keySeq();
-            title = 'All Posts';
+            title = <span><span style={ categoryNameStyle }>All</span> Posts</span>;
         } else {
             postIds = this.props[ STORE_POSTS_BY_CATEGORY ].get( categoryId );
             if ( !postIds ) {
@@ -85,7 +88,11 @@ class ListView extends PureComponent {
 
         return (
             <div>
-                <h2 style={ titleStyle }>{ title }</h2>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h2 style={ titleStyle }>{ title }</h2>
+                    </div>
+                </div>
                 { postSummaries }
             </div>
         );
