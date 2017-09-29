@@ -19,8 +19,8 @@ const titleStyle = {
     textTransform: 'uppercase'
 };
 
-// TODO (1) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum) and the
-// TODO     sort works properly.
+// TODO (1) (a) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum)
+// TODO     (b) the sort works properly
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
