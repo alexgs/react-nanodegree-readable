@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import PostAuthor from './PostAuthor';
 import PostCommentData from './PostCommentData';
+import PostEditDeleteButtons from './PostEditDeleteButtons';
 import PostScore from './PostScore';
 
 // TODO (1) Listed posts are displayed with
@@ -66,6 +67,7 @@ class PostSummary extends PureComponent {
                     <PostScore score={ voteScore } />
                     <PostAuthor author={ author } />
                     <PostCommentData commentCount={ commentCount } />
+                    <PostEditDeleteButtons />
                 </div>
             </section>
         );
