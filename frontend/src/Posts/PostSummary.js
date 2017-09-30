@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import PostAuthor from './PostAuthor';
+import PostCommentData from './PostCommentData';
 import PostScore from './PostScore';
 
 // TODO (1) Listed posts are displayed with
@@ -44,6 +45,7 @@ class PostSummary extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired,
         body: PropTypes.string.isRequired,
+        commentCount: PropTypes.number.isRequired,
         category: PropTypes.string.isRequired,
         deleted: PropTypes.bool.isRequired,
         id: PropTypes.string.isRequired,
@@ -53,7 +55,7 @@ class PostSummary extends PureComponent {
     };
 
     render() {
-        const { author, body, voteScore, title } = this.props;
+        const { author, body, commentCount, voteScore, title } = this.props;
         return (
             <section className="row" style={ summarySectionStyle }>
                 <div className="col-xs-12" style={ flexColumnStyle }>
@@ -63,7 +65,7 @@ class PostSummary extends PureComponent {
                 <div className="col-xs-12" style={ flexColumnStyle }>
                     <PostScore score={ voteScore } />
                     <PostAuthor author={ author } />
-                    <div style={ secondRowBlockStyle }>comments: 0</div>
+                    <PostCommentData commentCount={ commentCount } />
                 </div>
             </section>
         );

@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { CATEGORY_ALL, STORE_CATEGORIES, STORE_POSTS_BY_CATEGORY, STORE_POSTS_DATA } from '../constants';
 import { downloadPostsStart } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
+import {
+    CATEGORY_ALL,
+    STORE_CATEGORIES,
+    STORE_COMMENTS_BY_POST,
+    STORE_POSTS_BY_CATEGORY,
+    STORE_POSTS_DATA
+} from '../constants';
 
 const categoryNameStyle = {
     color: 'maroon',
@@ -28,6 +34,9 @@ class ListView extends PureComponent {
             name: PropTypes.string.isRequired,
             path: PropTypes.string.isRequired
         } ) ).isRequired,
+        [STORE_COMMENTS_BY_POST]: ImmutablePropTypes.mapOf(
+            ImmutablePropTypes.setOf( PropTypes.string )
+        ).isRequired,
         [STORE_POSTS_BY_CATEGORY]: ImmutablePropTypes.mapOf(
             ImmutablePropTypes.setOf( PropTypes.string )
         ).isRequired,
@@ -69,16 +78,21 @@ class ListView extends PureComponent {
             title = <span>Posts in the <span style={ categoryNameStyle }>{ categoryName }</span> Category</span>;
         }
 
+        const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
+        const commentsLoaded = commentsByPost.size > 0;         // Assume there is at least one post with at least one comment
         const postSummaries = postIds.map( id => {
             const data = postData.get( id );
+            const postId = data.get( 'id' );
+            const commentCount = commentsLoaded && commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
             return (
                 <PostSummary
-                    key={ data.get( 'id' ) }
+                    key={ postId }
                     author={ data.get( 'author' ) }
                     body={ data.get( 'body' ) }
                     category={ data.get( 'category' ) }
+                    commentCount={ commentCount }
                     deleted={ data.get( 'deleted' ) }
-                    id={ data.get( 'id' ) }
+                    id={ postId }
                     timestamp={ data.get( 'timestamp' ) }
                     title={ data.get( 'title' ) }
                     voteScore={ data.get( 'voteScore' ) }
@@ -101,6 +115,7 @@ class ListView extends PureComponent {
 
 export default connect( state => ({
     categories: state.get( STORE_CATEGORIES ),
+    [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
     [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
     [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
 }) )( ListView );
