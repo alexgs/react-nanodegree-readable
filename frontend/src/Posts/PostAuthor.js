@@ -3,7 +3,10 @@ import React, { PureComponent } from 'react';
 import { secondRowBlockStyle } from './PostSummary';
 
 const nameStyle = {
-    color: 'maroon'
+    color: 'maroon',
+    fontSize: '90%',
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
 };
 
 class PostAuthor extends PureComponent {
@@ -12,10 +15,9 @@ class PostAuthor extends PureComponent {
     };
 
     render() {
-
         return (
             <div style={ secondRowBlockStyle }>
-                author: <span style={ nameStyle }>{ this.props.author }</span>
+                Author: <span style={ nameStyle }>{ this.props.author }</span>
             </div>
         )
     }
