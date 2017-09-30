@@ -16,12 +16,28 @@ const lowScoreStyle = {
 };
 
 class PostScore extends PureComponent {
+    constructor( props ) {
+        super( props );
+        this.handleDownVoteClick = this.handleDownVoteClick.bind( this );
+        this.handleUpVoteClick = this.handleUpVoteClick.bind( this );
+    }
     static propTypes = {
-        score: PropTypes.number.isRequired
+        downVoteFunction: PropTypes.func.isRequired,
+        postId: PropTypes.string.isRequired,
+        score: PropTypes.number.isRequired,
+        upVoteFunction: PropTypes.func.isRequired
     };
 
+    handleDownVoteClick() {
+        this.props.downVoteFunction( this.props.postId );
+    }
+
+    handleUpVoteClick() {
+        this.props.upVoteFunction( this.props.postId );
+    }
+
     render() {
-        const score = this.props.score;
+        const { downVoteFunction, postId, score, upVoteFunction } = this.props;
         let scoreStyle = defaultScoreStyle;
         if ( score < -2 ) {
             scoreStyle = _.merge( {}, defaultScoreStyle, lowScoreStyle );
@@ -31,8 +47,14 @@ class PostScore extends PureComponent {
         return (
             <div style={ secondRowBlockStyle }>
                 Score: <span style={ scoreStyle }>{ score }</span>
-                &nbsp;<span className="fa fa-thumbs-o-up" />
-                &nbsp;<span className="fa fa-thumbs-o-down" />
+                &nbsp;
+                <button type="button" className="btn btn-link" onClick={ this.handleUpVoteClick }>
+                    <span className="fa fa-thumbs-o-up" />
+                </button>
+                &nbsp;
+                <button type="button" className="btn btn-link" onClick={ this.handleDownVoteClick } >
+                    <span className="fa fa-thumbs-o-down" />
+                </button>
             </div>
         )
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { downloadPostsStart } from '../Posts/actions';
+import { downloadPostsStart, downVotePost, upVotePost } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
 import {
     CATEGORY_ALL,
@@ -25,9 +25,16 @@ const titleStyle = {
     textTransform: 'uppercase'
 };
 
-// TODO (1) (a) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum)
+// TODO (1) List pages (root or category) include
+// TODO     (a) a mechanism for sorting by date or by score (at a minimum)
 // TODO     (b) the sort works properly
 class ListView extends PureComponent {
+    constructor( props ) {
+        super( props );
+        this.downVotePost = this.downVotePost.bind( this );
+        this.upVotePost = this.upVotePost.bind( this );
+    }
+
     static propTypes = {
         category: PropTypes.string.isRequired,
         categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
@@ -51,6 +58,14 @@ class ListView extends PureComponent {
             voteScore: PropTypes.number
         } ).isRequired
     };
+
+    downVotePost( postId ) {
+        this.props.dispatch( downVotePost( postId ) )
+    }
+
+    upVotePost( postId ) {
+        this.props.dispatch( upVotePost( postId ) )
+    }
 
     componentDidMount() {
         this.props.dispatch( downloadPostsStart() );
@@ -92,9 +107,11 @@ class ListView extends PureComponent {
                     category={ data.get( 'category' ) }
                     commentCount={ commentCount }
                     deleted={ data.get( 'deleted' ) }
+                    downVoteFunction={ this.downVotePost }
                     id={ postId }
                     timestamp={ data.get( 'timestamp' ) }
                     title={ data.get( 'title' ) }
+                    upVoteFunction={ this.upVotePost }
                     voteScore={ data.get( 'voteScore' ) }
                 />
             );
