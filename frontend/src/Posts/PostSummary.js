@@ -32,6 +32,14 @@ const summaryBodyStyle = {
     whiteSpace: 'nowrap',
 };
 
+export const summaryButtonStyle = {
+    border: 'none',
+    margin: 0,
+    padding: 0,
+    fontSize: 'inherit',
+    color: 'inherit'
+};
+
 const summarySectionStyle = {
     fontSize: '120%',
     marginTop: 10

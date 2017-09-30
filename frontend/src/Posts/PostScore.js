@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
-import { secondRowBlockStyle } from './PostSummary';
+import { secondRowBlockStyle, summaryButtonStyle } from './PostSummary';
 
 const defaultScoreStyle = {
     fontWeight: 'bold'
@@ -48,11 +48,21 @@ class PostScore extends PureComponent {
             <div style={ secondRowBlockStyle }>
                 Score: <span style={ scoreStyle }>{ score }</span>
                 &nbsp;
-                <button type="button" className="btn btn-link" onClick={ this.handleUpVoteClick }>
+                <button
+                    className="btn btn-link"
+                    style={ summaryButtonStyle }
+                    type="button"
+                    onClick={ this.handleUpVoteClick }
+                >
                     <span className="fa fa-thumbs-o-up" />
                 </button>
                 &nbsp;
-                <button type="button" className="btn btn-link" onClick={ this.handleDownVoteClick } >
+                <button
+                    className="btn btn-link"
+                    style={ summaryButtonStyle }
+                    type="button"
+                    onClick={ this.handleDownVoteClick }
+                >
                     <span className="fa fa-thumbs-o-down" />
                 </button>
             </div>
