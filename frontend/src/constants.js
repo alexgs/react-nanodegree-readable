@@ -4,6 +4,7 @@ export const DOWNLOAD_CATEGORIES_COMPLETE = 'download-categories-complete';
 export const DOWNLOAD_COMMENTS_COMPLETE = 'download-comments-complete';
 export const DOWNLOAD_POSTS_COMPLETE = 'download-posts-complete';
 export const ERROR_SOURCE_API = 'api-error';
+export const POST_VOTE_COMPLETE = 'post-vote-complete';
 export const STORE_CATEGORIES = 'categories';
 export const STORE_COMMENTS_BY_POST = 'comments-by-post';
 export const STORE_COMMENTS_DATA = 'comments-data';

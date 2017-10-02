@@ -1,6 +1,6 @@
 import * as api from '../api';
 import { thunkPromiseChainErrorHandler } from '../utils';
-import { DOWNLOAD_POSTS_COMPLETE, ERROR_SOURCE_API } from '../constants';
+import { DOWNLOAD_POSTS_COMPLETE, ERROR_SOURCE_API, POST_VOTE_COMPLETE } from '../constants';
 
 export const downloadPostsComplete = function( postsList ) {
     return {
@@ -26,8 +26,8 @@ export const downVotePost = function( postId ) {
 
 export const postVoteComplete = function( postData ) {
     return {
-        type: 'post-vote-complete',
-        data: `The change in score for ${postData.id} is complete.`
+        type: POST_VOTE_COMPLETE,
+        data: postData
     };
 };
 
