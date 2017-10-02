@@ -18,6 +18,26 @@ export const fetchPosts = function() {
     return getWorker( '/posts' );
 };
 
+export const sendPostDownVote = function( postId ) {
+    const url = urlFactory( '/posts/' + makeToken( 'postId'), { postId } );
+    const payload = { option: 'downVote' };
+    const fetchOptions = {
+        body: JSON.stringify( payload ),
+        headers: _.merge( {}, HEADER_AUTHORIZATION, HEADER_CONTENT_JSON ),
+        method: 'POST',
+    };
+    return fetch( url, fetchOptions )
+        .then( response => {
+            if ( response.ok ) {
+                return response.json();
+            } else {
+                const error = new Error( `POST request to ${postId} returned status code ${response.status }` );
+                error.source = ERROR_SOURCE_API;
+                throw error;
+            }
+        } );
+};
+
 export const sendPostUpVote = function( postId ) {
     const url = urlFactory( '/posts/' + makeToken( 'postId'), { postId } );
     const payload = { option: 'upVote' };

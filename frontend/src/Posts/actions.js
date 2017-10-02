@@ -18,10 +18,11 @@ export const downloadPostsStart = function() {
 };
 
 export const downVotePost = function( postId ) {
-    return {
-        type: 'down-vote-post',
-        data: `Ouch! That's -1 for ${postId}`
-    };
+    return function( dispatch ) {
+        return api.sendPostDownVote( postId )
+            .then( payload => dispatch( postVoteComplete( payload ) ) )
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
+    }
 };
 
 export const postVoteComplete = function( postData ) {
