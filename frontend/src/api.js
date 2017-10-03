@@ -19,43 +19,13 @@ export const fetchPosts = function() {
 };
 
 export const sendPostDownVote = function( postId ) {
-    const url = urlFactory( '/posts/' + makeToken( 'postId'), { postId } );
     const payload = { option: 'downVote' };
-    const fetchOptions = {
-        body: JSON.stringify( payload ),
-        headers: _.merge( {}, HEADER_AUTHORIZATION, HEADER_CONTENT_JSON ),
-        method: 'POST',
-    };
-    return fetch( url, fetchOptions )
-        .then( response => {
-            if ( response.ok ) {
-                return response.json();
-            } else {
-                const error = new Error( `POST request to ${postId} returned status code ${response.status }` );
-                error.source = ERROR_SOURCE_API;
-                throw error;
-            }
-        } );
+    return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
 };
 
 export const sendPostUpVote = function( postId ) {
-    const url = urlFactory( '/posts/' + makeToken( 'postId'), { postId } );
     const payload = { option: 'upVote' };
-    const fetchOptions = {
-        body: JSON.stringify( payload ),
-        headers: _.merge( {}, HEADER_AUTHORIZATION, HEADER_CONTENT_JSON ),
-        method: 'POST',
-    };
-    return fetch( url, fetchOptions )
-        .then( response => {
-            if ( response.ok ) {
-                return response.json();
-            } else {
-                const error = new Error( `POST request to ${postId} returned status code ${response.status }` );
-                error.source = ERROR_SOURCE_API;
-                throw error;
-            }
-        } );
+    return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
 };
 
 // --- PRIVATE UTILITY & HELPER FUNCTIONS ---
@@ -80,18 +50,33 @@ const urlFactory = function( path, options={} ) {
     return 'http://localhost:3001' + path;
 };
 
-const getWorker = function( path, options={} ) {
-    const url = urlFactory( path, options );
-    return fetch( url, { headers: { 'Authorization': AUTHORIZATION_KEY } } )
+const fetchWorker = function( path, urlOptions, fetchOptions={} ) {
+    fetchOptions.headers = _.merge( {}, HEADER_AUTHORIZATION, fetchOptions.headers );
+    const url = urlFactory( path, urlOptions );
+    return fetch( url, fetchOptions )
         .then( response => {
             if ( response.ok ) {
                 return response.json();
             } else {
-                const error = new Error( `Path ${path} returned status code ${response.status }` );
+                const method = fetchOptions.method ? _.toUpper( fetchOptions.method ) : 'GET';
+                const error = new Error( `${method} request to ${url} returned status code ${response.status }` );
                 error.source = ERROR_SOURCE_API;
                 throw error;
             }
         } );
+};
+
+const getWorker = function( path, urlOptions={} ) {
+    return fetchWorker( path, urlOptions );
+};
+
+const postWorker = function( path, payload, urlOptions={} ) {
+    const fetchOptions = {
+        body: JSON.stringify( payload ),
+        headers: HEADER_CONTENT_JSON,
+        method: 'POST',
+    };
+    return fetchWorker( path, urlOptions, fetchOptions );
 };
 
 const makeToken = function( key ) {
