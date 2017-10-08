@@ -42,7 +42,7 @@ class App extends Component {
                                 <div>
                                     <Route
                                         path={ match.url + '/:postId' } exact
-                                        render={ () => ( <PostDetail id={ match.params.postId } /> ) }
+                                        render={ ( props ) => ( <PostDetail postId={ props.match.params.postId } /> ) }
                                     />
                                     <Route
                                         path={ match.url } exact
