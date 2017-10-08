@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
-import { secondRowBlockStyle, summaryButtonStyle } from './PostSummary';
+import { secondRowBlockStyle, summaryButtonStyle } from './Summary';
 
 const defaultScoreStyle = {
     fontWeight: 'bold'

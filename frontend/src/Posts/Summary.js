@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import PostAuthor from './PostAuthor';
-import PostCommentData from './PostCommentData';
-import PostEditDeleteButtons from './PostEditDeleteButtons';
-import PostScore from './PostScore';
+import PostAuthor from './Author';
+import PostCommentData from './CommentData';
+import PostEditDeleteButtons from './EditDeleteButtons';
+import PostScore from './Score';
 
 // TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
 

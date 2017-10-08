@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { deletePost, downloadPostsStart, downVotePost, upVotePost } from '../Posts/actions';
-import PostSummary from '../Posts/PostSummary';
+import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import PostSummary from './Summary';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,

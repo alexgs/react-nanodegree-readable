@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle, summaryButtonStyle } from './PostSummary';
+import { secondRowBlockStyle, summaryButtonStyle } from './Summary';
 
 class PostEditDeleteButtons extends PureComponent {
     static propTypes = {
