@@ -2,16 +2,10 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import PostAuthor from './PostAuthor';
 import PostCommentData from './PostCommentData';
+import PostEditDeleteButtons from './PostEditDeleteButtons';
 import PostScore from './PostScore';
 
-// TODO (1) Listed posts are displayed with
-// TODO     (a) title
-// TODO     (b) author
-// TODO     (c) number of comments
-// TODO     (d) current score
-// TODO     (e) a voting mechanism to upvote or downvote the post.
-// TODO     (f) buttons or links for editing or deleting the post
-// TODO (2) The voting mechanism works and correctly displays the new vote score after clicking.
+// TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
 
 export const secondRowBlockStyle = {
     marginLeft: 0,
@@ -36,6 +30,14 @@ const summaryBodyStyle = {
     whiteSpace: 'nowrap',
 };
 
+export const summaryButtonStyle = {
+    border: 'none',
+    margin: 0,
+    padding: 0,
+    fontSize: 'inherit',
+    color: 'inherit'
+};
+
 const summarySectionStyle = {
     fontSize: '120%',
     marginTop: 10
@@ -47,15 +49,27 @@ class PostSummary extends PureComponent {
         body: PropTypes.string.isRequired,
         commentCount: PropTypes.number.isRequired,
         category: PropTypes.string.isRequired,
-        deleted: PropTypes.bool.isRequired,
+        deleteFunction: PropTypes.func.isRequired,
+        downVoteFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
         timestamp: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
+        upVoteFunction: PropTypes.func.isRequired,
         voteScore: PropTypes.number.isRequired
     };
 
     render() {
-        const { author, body, commentCount, voteScore, title } = this.props;
+        const {
+            author,
+            body,
+            commentCount,
+            deleteFunction,
+            downVoteFunction,
+            id,
+            title,
+            upVoteFunction,
+            voteScore
+        } = this.props;
         return (
             <section className="row" style={ summarySectionStyle }>
                 <div className="col-xs-12" style={ flexColumnStyle }>
@@ -63,9 +77,18 @@ class PostSummary extends PureComponent {
                     <div style={ summaryBodyStyle }>{ body }</div>
                 </div>
                 <div className="col-xs-12" style={ flexColumnStyle }>
-                    <PostScore score={ voteScore } />
+                    <PostScore
+                        downVoteFunction={ downVoteFunction }
+                        postId={ id }
+                        score={ voteScore }
+                        upVoteFunction={ upVoteFunction }
+                    />
                     <PostAuthor author={ author } />
                     <PostCommentData commentCount={ commentCount } />
+                    <PostEditDeleteButtons
+                        deleteFunction={ deleteFunction }
+                        postId={ id }
+                    />
                 </div>
             </section>
         );

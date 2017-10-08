@@ -15,7 +15,7 @@ class PostCommentData extends PureComponent {
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>comments: { this.props.commentCount }
+            <div style={ secondRowBlockStyle }>Comments: { this.props.commentCount }
                 <span className="fa-stack" style={ stackStyle }>
                     <span className="fa fa-comment-o fa-stack-2x" />
                     <span className="fa fa-plus fa-stack-1x" />

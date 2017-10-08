@@ -25,7 +25,7 @@ class NavBar extends Component {
                                 const name = category.get( 'name' );
                                 const path = category.get( 'path' );
                                 return (
-                                    <BootstrapNavLink key={ path } to={ `/cat/${path}` }>{ name }</BootstrapNavLink>
+                                    <BootstrapNavLink key={ path } to={ `/${path}` }>{ name }</BootstrapNavLink>
                                 );
                             } ) }
                         </ul>

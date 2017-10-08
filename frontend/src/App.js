@@ -26,7 +26,6 @@ class App extends Component {
     }
 
     render() {
-        // TODO: Fix paths to match what is in the rubric
         return (
             <BrowserRouter>
                 <div className="readable-app">
@@ -38,20 +37,16 @@ class App extends Component {
                             render={ () => ( <ListView category={ CATEGORY_ALL } /> ) }
                         />
                         <Route
-                            path="/cat/:category"
-                            render={ ({ match }) => ( <ListView category={ match.params.category } /> ) }
-                        />
-                        <Route
-                            path="/post/:postId"
+                            path="/:category"
                             render={ ({ match }) => (
                                 <div>
                                     <Route
-                                        path={ match.url + '/edit' } exact
-                                        render={ () => ( <EditPost id={ match.params.postId } /> ) }
+                                        path={ match.url + '/:postId' } exact
+                                        render={ () => ( <PostDetail id={ match.params.postId } /> ) }
                                     />
                                     <Route
                                         path={ match.url } exact
-                                        render={ () => ( <PostDetail id={ match.params.postId } /> ) }
+                                        render={ () => ( <ListView category={ match.params.category } /> ) }
                                     />
                                 </div>
                             ) }

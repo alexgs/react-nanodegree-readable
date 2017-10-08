@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { downloadPostsStart } from '../Posts/actions';
+import { deletePost, downloadPostsStart, downVotePost, upVotePost } from '../Posts/actions';
 import PostSummary from '../Posts/PostSummary';
 import {
     CATEGORY_ALL,
@@ -25,7 +25,8 @@ const titleStyle = {
     textTransform: 'uppercase'
 };
 
-// TODO (1) (a) List pages (root or category) include a mechanism for sorting by date or by score (at a minimum)
+// TODO (1) List pages (root or category) include
+// TODO     (a) a mechanism for sorting by date or by score (at a minimum)
 // TODO     (b) the sort works properly
 class ListView extends PureComponent {
     static propTypes = {
@@ -51,6 +52,25 @@ class ListView extends PureComponent {
             voteScore: PropTypes.number
         } ).isRequired
     };
+
+    constructor( props ) {
+        super( props );
+        this.deletePost = this.deletePost.bind( this );
+        this.downVotePost = this.downVotePost.bind( this );
+        this.upVotePost = this.upVotePost.bind( this );
+    }
+
+    deletePost( postId ) {
+        this.props.dispatch( deletePost( postId ) );
+    }
+
+    downVotePost( postId ) {
+        this.props.dispatch( downVotePost( postId ) );
+    }
+
+    upVotePost( postId ) {
+        this.props.dispatch( upVotePost( postId ) );
+    }
 
     componentDidMount() {
         this.props.dispatch( downloadPostsStart() );
@@ -79,26 +99,34 @@ class ListView extends PureComponent {
         }
 
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const commentsLoaded = commentsByPost.size > 0;         // Assume there is at least one post with at least one comment
-        const postSummaries = postIds.map( id => {
-            const data = postData.get( id );
-            const postId = data.get( 'id' );
-            const commentCount = commentsLoaded && commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
-            return (
-                <PostSummary
-                    key={ postId }
-                    author={ data.get( 'author' ) }
-                    body={ data.get( 'body' ) }
-                    category={ data.get( 'category' ) }
-                    commentCount={ commentCount }
-                    deleted={ data.get( 'deleted' ) }
-                    id={ postId }
-                    timestamp={ data.get( 'timestamp' ) }
-                    title={ data.get( 'title' ) }
-                    voteScore={ data.get( 'voteScore' ) }
-                />
-            );
-        } );
+        const commentsLoaded = commentsByPost.size > 0;   // Assume there is at least one post with at least one comment
+        const postSummaries = postIds
+            .filter( id => {
+                const data = postData.get( id );
+                return !data.get( 'deleted' );
+            } )
+            .map( id => {
+                const data = postData.get( id );
+                const postId = data.get( 'id' );
+                const commentCount = commentsLoaded && commentsByPost.has( postId )
+                    ? commentsByPost.get( postId ).size : 0;
+                return (
+                    <PostSummary
+                        key={ postId }
+                        author={ data.get( 'author' ) }
+                        body={ data.get( 'body' ) }
+                        category={ data.get( 'category' ) }
+                        commentCount={ commentCount }
+                        deleteFunction={ this.deletePost }
+                        downVoteFunction={ this.downVotePost }
+                        id={ postId }
+                        timestamp={ data.get( 'timestamp' ) }
+                        title={ data.get( 'title' ) }
+                        upVoteFunction={ this.upVotePost }
+                        voteScore={ data.get( 'voteScore' ) }
+                    />
+                );
+            } );
 
         return (
             <div>
