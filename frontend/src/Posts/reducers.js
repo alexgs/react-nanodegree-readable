@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import store from '../store';
 import { downloadCommentsStart } from '../Comments/actions';
-import { DOWNLOAD_POSTS_COMPLETE, POST_VOTE_COMPLETE } from '../constants';
+import { DOWNLOAD_POSTS_COMPLETE, POST_DELETE_COMPLETE, POST_VOTE_COMPLETE } from '../constants';
 
 const postsByCategoryDefaultState = Immutable.Map();
 const postsDataDefaultState = Immutable.Map();
@@ -36,6 +36,7 @@ export const postsDataReducer = function( state=postsDataDefaultState, action ) 
                     store.dispatch( downloadCommentsStart( post.id ) );
                 } );
             } );
+        case POST_DELETE_COMPLETE:      // Fall-through
         case POST_VOTE_COMPLETE:
             const post = action.data;
             return state.set( post.id, Immutable.fromJS( post ) );

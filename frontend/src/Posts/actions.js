@@ -1,6 +1,21 @@
 import * as api from '../api';
 import { thunkPromiseChainErrorHandler } from '../utils';
-import { DOWNLOAD_POSTS_COMPLETE, ERROR_SOURCE_API, POST_VOTE_COMPLETE } from '../constants';
+import { DOWNLOAD_POSTS_COMPLETE, ERROR_SOURCE_API, POST_DELETE_COMPLETE, POST_VOTE_COMPLETE } from '../constants';
+
+export const deletePost = function( postId ) {
+    return function( dispatch ) {
+        return api.deletePost( postId )
+            .then( payload => dispatch( deletePostComplete( payload ) ) )
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
+    };
+};
+
+export const deletePostComplete = function( postData ) {
+    return {
+        type: POST_DELETE_COMPLETE,
+        data: postData
+    };
+};
 
 export const downloadPostsComplete = function( postsList ) {
     return {
@@ -14,7 +29,7 @@ export const downloadPostsStart = function() {
         return api.fetchPosts()
             .then( payload => dispatch( downloadPostsComplete( payload ) ) )
             .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
-    }
+    };
 };
 
 export const downVotePost = function( postId ) {
@@ -22,7 +37,7 @@ export const downVotePost = function( postId ) {
         return api.sendPostDownVote( postId )
             .then( payload => dispatch( postVoteComplete( payload ) ) )
             .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
-    }
+    };
 };
 
 export const postVoteComplete = function( postData ) {
@@ -37,5 +52,5 @@ export const upVotePost = function( postId ) {
         return api.sendPostUpVote( postId )
             .then( payload => dispatch( postVoteComplete( payload ) ) )
             .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
-    }
+    };
 };

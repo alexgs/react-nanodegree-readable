@@ -5,9 +5,7 @@ import PostCommentData from './PostCommentData';
 import PostEditDeleteButtons from './PostEditDeleteButtons';
 import PostScore from './PostScore';
 
-// TODO (1) Listed posts are displayed with
-// TODO     (f) buttons or links for editing or deleting the post
-// TODO (2) The voting mechanism works and correctly displays the new vote score after clicking.
+// TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
 
 export const secondRowBlockStyle = {
     marginLeft: 0,
@@ -51,7 +49,7 @@ class PostSummary extends PureComponent {
         body: PropTypes.string.isRequired,
         commentCount: PropTypes.number.isRequired,
         category: PropTypes.string.isRequired,
-        deleted: PropTypes.bool.isRequired,
+        deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
         timestamp: PropTypes.number.isRequired,
@@ -61,7 +59,17 @@ class PostSummary extends PureComponent {
     };
 
     render() {
-        const { author, body, commentCount, downVoteFunction, id, title, upVoteFunction, voteScore } = this.props;
+        const {
+            author,
+            body,
+            commentCount,
+            deleteFunction,
+            downVoteFunction,
+            id,
+            title,
+            upVoteFunction,
+            voteScore
+        } = this.props;
         return (
             <section className="row" style={ summarySectionStyle }>
                 <div className="col-xs-12" style={ flexColumnStyle }>
@@ -77,7 +85,10 @@ class PostSummary extends PureComponent {
                     />
                     <PostAuthor author={ author } />
                     <PostCommentData commentCount={ commentCount } />
-                    <PostEditDeleteButtons />
+                    <PostEditDeleteButtons
+                        deleteFunction={ deleteFunction }
+                        postId={ id }
+                    />
                 </div>
             </section>
         );

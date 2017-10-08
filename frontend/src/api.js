@@ -6,6 +6,15 @@ const HEADER_CONTENT_JSON = { 'Content-Type': 'application/json' };
 
 // --- PUBLIC API METHODS ---
 
+export const deletePost = function( postId ) {
+    const urlPath = '/posts/' + makeToken( 'postId' );
+    const urlOptions = { postId };
+    const requestOptions = {
+        method: 'DELETE',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
+};
+
 export const fetchCategories = function () {
     return getWorker( '/categories' );
 };
@@ -30,6 +39,39 @@ export const sendPostUpVote = function( postId ) {
 
 // --- PRIVATE UTILITY & HELPER FUNCTIONS ---
 
+const getWorker = function( path, urlOptions={} ) {
+    return requestWorker( path, urlOptions );
+};
+
+const makeToken = function( key ) {
+    return '${' + key + '}';
+};
+
+const postWorker = function( path, payload, urlOptions={} ) {
+    const requestOptions = {
+        body: JSON.stringify( payload ),
+        headers: HEADER_CONTENT_JSON,
+        method: 'POST',
+    };
+    return requestWorker( path, urlOptions, requestOptions );
+};
+
+const requestWorker = function( path, urlOptions, requestOptions={} ) {
+    requestOptions.headers = _.merge( {}, HEADER_AUTHORIZATION, requestOptions.headers );
+    const url = urlFactory( path, urlOptions );
+    return fetch( url, requestOptions )
+        .then( response => {
+            if ( response.ok ) {
+                return response.json();
+            } else {
+                const method = requestOptions.method ? _.toUpper( requestOptions.method ) : 'GET';
+                const error = new Error( `${method} request to ${url} returned status code ${response.status}` );
+                error.source = ERROR_SOURCE_API;
+                throw error;
+            }
+        } );
+};
+
 const urlFactory = function( path, options={} ) {
     if ( !path.startsWith('/') ) {
         throw new Error( 'Path must start with forward-slash' );
@@ -48,37 +90,4 @@ const urlFactory = function( path, options={} ) {
     } );
 
     return 'http://localhost:3001' + path;
-};
-
-const fetchWorker = function( path, urlOptions, fetchOptions={} ) {
-    fetchOptions.headers = _.merge( {}, HEADER_AUTHORIZATION, fetchOptions.headers );
-    const url = urlFactory( path, urlOptions );
-    return fetch( url, fetchOptions )
-        .then( response => {
-            if ( response.ok ) {
-                return response.json();
-            } else {
-                const method = fetchOptions.method ? _.toUpper( fetchOptions.method ) : 'GET';
-                const error = new Error( `${method} request to ${url} returned status code ${response.status }` );
-                error.source = ERROR_SOURCE_API;
-                throw error;
-            }
-        } );
-};
-
-const getWorker = function( path, urlOptions={} ) {
-    return fetchWorker( path, urlOptions );
-};
-
-const postWorker = function( path, payload, urlOptions={} ) {
-    const fetchOptions = {
-        body: JSON.stringify( payload ),
-        headers: HEADER_CONTENT_JSON,
-        method: 'POST',
-    };
-    return fetchWorker( path, urlOptions, fetchOptions );
-};
-
-const makeToken = function( key ) {
-    return '${' + key + '}';
 };

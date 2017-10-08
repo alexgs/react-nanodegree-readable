@@ -16,17 +16,18 @@ const lowScoreStyle = {
 };
 
 class PostScore extends PureComponent {
-    constructor( props ) {
-        super( props );
-        this.handleDownVoteClick = this.handleDownVoteClick.bind( this );
-        this.handleUpVoteClick = this.handleUpVoteClick.bind( this );
-    }
     static propTypes = {
         downVoteFunction: PropTypes.func.isRequired,
         postId: PropTypes.string.isRequired,
         score: PropTypes.number.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
+
+    constructor( props ) {
+        super( props );
+        this.handleDownVoteClick = this.handleDownVoteClick.bind( this );
+        this.handleUpVoteClick = this.handleUpVoteClick.bind( this );
+    }
 
     handleDownVoteClick() {
         this.props.downVoteFunction( this.props.postId );
@@ -37,7 +38,7 @@ class PostScore extends PureComponent {
     }
 
     render() {
-        const { downVoteFunction, postId, score, upVoteFunction } = this.props;
+        const { score } = this.props;
         let scoreStyle = defaultScoreStyle;
         if ( score < -2 ) {
             scoreStyle = _.merge( {}, defaultScoreStyle, lowScoreStyle );
