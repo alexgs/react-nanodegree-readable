@@ -99,7 +99,7 @@ class ListView extends PureComponent {
         }
 
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const commentsLoaded = commentsByPost.size > 0;   // Assume there is at least one post with at least one comment
+        const commentsLoaded = commentsByPost.size > 0;         // Assume at least one post with at least one comment
         const postSummaries = postIds
             .filter( id => {
                 const data = postData.get( id );

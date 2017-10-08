@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Summary from './Summary';
-import { deletePost, downVotePost, upVotePost } from './actions';
+import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import { STORE_COMMENTS_BY_POST, STORE_POSTS_DATA } from '../constants';
 
 class PostDetail extends PureComponent {
@@ -44,28 +44,38 @@ class PostDetail extends PureComponent {
         this.props.dispatch( upVotePost( postId ) );
     }
 
-    render() {
-        const postId = this.props.postId;
-        const postData = this.props[ STORE_POSTS_DATA ].get( postId );
-        const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const commentCount = commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
+    componentDidMount() {
+        this.props.dispatch( downloadPostsStart() );
+    }
 
-        return (
-            <Summary
-                author={ postData.get( 'author' ) }
-                body={ postData.get( 'body' ) }
-                category={ postData.get( 'category' ) }
-                commentCount={ commentCount }
-                deleteFunction={ this.deletePost }
-                downVoteFunction={ this.downVotePost }
-                id={ postId }
-                showSummary={ false }
-                timestamp={ postData.get( 'timestamp' ) }
-                title={ postData.get( 'title' ) }
-                upVoteFunction={ this.upVotePost }
-                voteScore={ postData.get( 'voteScore' ) }
-            />
-        );
+    render() {
+        const allPostData = this.props[ STORE_POSTS_DATA ];
+        const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
+        if ( allPostData.size > 0 ) {
+            const postId = this.props.postId;
+            const postData = allPostData.get( postId );
+            const commentsLoaded = commentsByPost.size > 0;     // Assume at least one post with at least one comment
+            const commentCount = commentsLoaded && commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
+
+            return (
+                <Summary
+                    author={ postData.get( 'author' ) }
+                    body={ postData.get( 'body' ) }
+                    category={ postData.get( 'category' ) }
+                    commentCount={ commentCount }
+                    deleteFunction={ this.deletePost }
+                    downVoteFunction={ this.downVotePost }
+                    id={ postId }
+                    showSummary={ false }
+                    timestamp={ postData.get( 'timestamp' ) }
+                    title={ postData.get( 'title' ) }
+                    upVoteFunction={ this.upVotePost }
+                    voteScore={ postData.get( 'voteScore' ) }
+                />
+            );
+        } else {
+            return null;
+        }
     }
 }
 
