@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 import Author from './Author';
 import CommentData from './CommentData';
 import EditDeleteButtons from './EditDeleteButtons';
@@ -47,8 +48,8 @@ class PostSummary extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired,
         body: PropTypes.string.isRequired,
-        commentCount: PropTypes.number.isRequired,
         category: PropTypes.string.isRequired,
+        commentCount: PropTypes.number.isRequired,
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
@@ -62,6 +63,7 @@ class PostSummary extends PureComponent {
         const {
             author,
             body,
+            category,
             commentCount,
             deleteFunction,
             downVoteFunction,
@@ -73,7 +75,9 @@ class PostSummary extends PureComponent {
         return (
             <section className="row" style={ summarySectionStyle }>
                 <div className="col-xs-12" style={ flexColumnStyle }>
-                    <h3 style={ h3Style }>{ title }</h3>
+                    <Link to={ `/${category}/${id}` } style={{ color: 'inherit' }}>
+                        <h3 style={ h3Style }>{ title }</h3>
+                    </Link>
                     <div style={ summaryBodyStyle }>{ body }</div>
                 </div>
                 <div className="col-xs-12" style={ flexColumnStyle }>
