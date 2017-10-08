@@ -1,50 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
 import Author from './Author';
 import CommentData from './CommentData';
 import EditDeleteButtons from './EditDeleteButtons';
 import Score from './Score';
+import Title from './Title';
+import FlexRow from '../General/FlexRow';
 
 // TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
-
-export const secondRowBlockStyle = {
-    marginLeft: 0,
-    marginRight: 10
-};
-
-const flexColumnStyle = {
-    alignItems: 'baseline',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start'
-};
-
-const getSummary = function( body, show=true ) {
-    if ( show ) {
-        return ( <div style={ summaryBodyStyle }>{ body }</div> );
-    } else {
-        return null;
-    }
-};
-
-const h3Style = {
-    margin: '0 1em 0 0',
-    whiteSpace: 'nowrap'
-};
 
 const summaryBodyStyle = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-};
-
-export const summaryButtonStyle = {
-    border: 'none',
-    margin: 0,
-    padding: 0,
-    fontSize: 'inherit',
-    color: 'inherit'
 };
 
 const summarySectionStyle = {
@@ -61,7 +29,6 @@ class PostSummary extends PureComponent {
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
-        showSummary: PropTypes.bool,
         timestamp: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         upVoteFunction: PropTypes.func.isRequired,
@@ -77,20 +44,17 @@ class PostSummary extends PureComponent {
             deleteFunction,
             downVoteFunction,
             id,
-            showSummary,
             title,
             upVoteFunction,
             voteScore
         } = this.props;
         return (
             <section className="row" style={ summarySectionStyle }>
-                <div className="col-xs-12" style={ flexColumnStyle }>
-                    <Link to={ `/${category}/${id}` } style={{ color: 'inherit' }}>
-                        <h3 style={ h3Style }>{ title }</h3>
-                    </Link>
-                    { getSummary( body, showSummary ) }
-                </div>
-                <div className="col-xs-12" style={ flexColumnStyle }>
+                <FlexRow>
+                    <Title category={ category } postId={ id } title={ title } />
+                    <div style={ summaryBodyStyle }>{ body }</div>
+                </FlexRow>
+                <FlexRow>
                     <Score
                         downVoteFunction={ downVoteFunction }
                         postId={ id }
@@ -103,7 +67,7 @@ class PostSummary extends PureComponent {
                         deleteFunction={ deleteFunction }
                         postId={ id }
                     />
-                </div>
+                </FlexRow>
             </section>
         );
     }

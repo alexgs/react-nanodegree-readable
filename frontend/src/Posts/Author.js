@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle } from './Summary';
+import MetadataBlock from './MetadataBlock';
 
 const nameStyle = {
     color: 'maroon',
@@ -16,9 +16,9 @@ class PostAuthor extends PureComponent {
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>
+            <MetadataBlock>
                 Author: <span style={ nameStyle }>{ this.props.author }</span>
-            </div>
+            </MetadataBlock>
         )
     }
 }

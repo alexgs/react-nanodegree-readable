@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle } from './Summary';
+import MetadataBlock from './MetadataBlock';
 
 const stackStyle = {
     fontSize: '50%',
@@ -15,12 +15,12 @@ class PostCommentData extends PureComponent {
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>Comments: { this.props.commentCount }
+            <MetadataBlock>Comments: { this.props.commentCount }
                 <span className="fa-stack" style={ stackStyle }>
                     <span className="fa fa-comment-o fa-stack-2x" />
                     <span className="fa fa-plus fa-stack-1x" />
                 </span>
-            </div>
+            </MetadataBlock>
         );
     }
 }

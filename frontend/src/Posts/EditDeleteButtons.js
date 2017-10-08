@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle, summaryButtonStyle } from './Summary';
+import MetadataBlock from './MetadataBlock';
+import MetadataButton from './MetadataButton';
 
 class PostEditDeleteButtons extends PureComponent {
     static propTypes = {
@@ -19,18 +20,13 @@ class PostEditDeleteButtons extends PureComponent {
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>
+            <MetadataBlock>
                 <span className="fa fa-pencil" />
                 &nbsp;&nbsp;
-                <button
-                    className="btn btn-link"
-                    style={ summaryButtonStyle }
-                    type="button"
-                    onClick={ this.handleDeleteClick }
-                >
+                <MetadataButton clickFunction={ this.handleDeleteClick }>
                     <span className="fa fa-trash-o" />
-                </button>
-            </div>
+                </MetadataButton>
+            </MetadataBlock>
         );
     }
 }
