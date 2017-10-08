@@ -2,9 +2,26 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Summary from './Summary';
+import Author from './Author';
+import CommentData from './CommentData';
+import EditDeleteButtons from './EditDeleteButtons';
+import Score from './Score';
+import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import FlexRow from '../General/FlexRow';
 import { STORE_COMMENTS_BY_POST, STORE_POSTS_DATA } from '../constants';
+
+const articleStyle = {
+    fontSize: '120%',
+    marginTop: 10
+};
+
+const titleStyle = {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 5
+};
 
 class PostDetail extends PureComponent {
     static propTypes = {
@@ -58,21 +75,39 @@ class PostDetail extends PureComponent {
             const commentCount = commentsLoaded && commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
 
             return (
-                <Summary
-                    author={ postData.get( 'author' ) }
-                    body={ postData.get( 'body' ) }
-                    category={ postData.get( 'category' ) }
-                    commentCount={ commentCount }
-                    deleteFunction={ this.deletePost }
-                    downVoteFunction={ this.downVotePost }
-                    id={ postId }
-                    showSummary={ false }
-                    timestamp={ postData.get( 'timestamp' ) }
-                    title={ postData.get( 'title' ) }
-                    upVoteFunction={ this.upVotePost }
-                    voteScore={ postData.get( 'voteScore' ) }
-                />
+                <article className="row" style={ articleStyle }>
+                    <FlexRow>
+                        <Score
+                            downVoteFunction={ this.downVotePost }
+                            postId={ postId }
+                            score={ postData.get( 'voteScore' ) }
+                            upVoteFunction={ this.upVotePost }
+                        />
+                        <Author author={ postData.get( 'author' ) } />
+                        <CommentData commentCount={ commentCount } />
+                        <EditDeleteButtons
+                            deleteFunction={ this.deletePost }
+                            postId={ postId }
+                        />
+                    </FlexRow>
+                    <div className="col-xs-12">
+                        <Title
+                            category={ postData.get( 'category' ) }
+                            postId={ postId }
+                            style={ titleStyle }
+                            title={ postData.get( 'title' ) }
+                        />
+                    </div>
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <content className="col-xs-8">
+                                { postData.get( 'body' ) }
+                            </content>
+                        </div>
+                    </div>
+                </article>
             );
+            // TODO Display comments
         } else {
             return null;
         }
