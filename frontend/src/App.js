@@ -5,12 +5,11 @@ import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
-import EditPost from './Posts/EditPost';
-import ListView from './Posts/ListView';
-import NavBar from './NavBar/NavBar';
-import PostDetail from './Posts/Detail';
 import { downloadCategoriesStart } from './Categories/actions';
+import CategoryRoutes from './Categories/ChildRoutes';
 import PageHeader from './General/PageHeader';
+import NavBar from './NavBar/NavBar';
+import ListView from './Posts/ListView';
 import { CATEGORY_ALL, STORE_CATEGORIES } from './constants';
 
 class App extends Component {
@@ -38,18 +37,7 @@ class App extends Component {
                         />
                         <Route
                             path="/:category"
-                            render={ ({ match }) => (
-                                <div>
-                                    <Route
-                                        path={ match.url + '/:postId' } exact
-                                        render={ ( props ) => ( <PostDetail postId={ props.match.params.postId } /> ) }
-                                    />
-                                    <Route
-                                        path={ match.url } exact
-                                        render={ () => ( <ListView category={ match.params.category } /> ) }
-                                    />
-                                </div>
-                            ) }
+                            render={ ({ match }) => <CategoryRoutes parentMatch={ match } /> }
                         />
                     </div>
                 </div>
@@ -58,4 +46,10 @@ class App extends Component {
     }
 }
 
-export default connect( state => ({ categories: state.get( STORE_CATEGORIES ) }) )( App );
+const mapStateToProps = function( state ) {
+    return {
+        categories: state.get( STORE_CATEGORIES )
+    };
+};
+
+export default connect( mapStateToProps )( App );
