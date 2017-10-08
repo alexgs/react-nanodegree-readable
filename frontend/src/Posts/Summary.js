@@ -20,6 +20,14 @@ const flexColumnStyle = {
     justifyContent: 'flex-start'
 };
 
+const getSummary = function( body, show=true ) {
+    if ( show ) {
+        return ( <div style={ summaryBodyStyle }>{ body }</div> );
+    } else {
+        return null;
+    }
+};
+
 const h3Style = {
     margin: '0 1em 0 0',
     whiteSpace: 'nowrap'
@@ -53,6 +61,7 @@ class PostSummary extends PureComponent {
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
+        showSummary: PropTypes.bool,
         timestamp: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         upVoteFunction: PropTypes.func.isRequired,
@@ -68,6 +77,7 @@ class PostSummary extends PureComponent {
             deleteFunction,
             downVoteFunction,
             id,
+            showSummary,
             title,
             upVoteFunction,
             voteScore
@@ -78,7 +88,7 @@ class PostSummary extends PureComponent {
                     <Link to={ `/${category}/${id}` } style={{ color: 'inherit' }}>
                         <h3 style={ h3Style }>{ title }</h3>
                     </Link>
-                    <div style={ summaryBodyStyle }>{ body }</div>
+                    { getSummary( body, showSummary ) }
                 </div>
                 <div className="col-xs-12" style={ flexColumnStyle }>
                     <Score

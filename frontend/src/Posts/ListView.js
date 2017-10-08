@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import Summary from './Summary';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
-import PostSummary from './Summary';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,
@@ -111,7 +111,7 @@ class ListView extends PureComponent {
                 const commentCount = commentsLoaded && commentsByPost.has( postId )
                     ? commentsByPost.get( postId ).size : 0;
                 return (
-                    <PostSummary
+                    <Summary
                         key={ postId }
                         author={ data.get( 'author' ) }
                         body={ data.get( 'body' ) }
@@ -141,9 +141,13 @@ class ListView extends PureComponent {
     }
 }
 
-export default connect( state => ({
-    categories: state.get( STORE_CATEGORIES ),
-    [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
-    [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
-    [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
-}) )( ListView );
+const mapStateToProps = function( state ) {
+    return {
+        categories: state.get( STORE_CATEGORIES ),
+        [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
+        [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
+        [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
+    };
+};
+
+export default connect( mapStateToProps )( ListView );
