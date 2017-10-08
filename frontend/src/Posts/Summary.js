@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import PostAuthor from './Author';
-import PostCommentData from './CommentData';
-import PostEditDeleteButtons from './EditDeleteButtons';
-import PostScore from './Score';
+import Author from './Author';
+import CommentData from './CommentData';
+import EditDeleteButtons from './EditDeleteButtons';
+import Score from './Score';
 
 // TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
 
@@ -77,15 +77,15 @@ class PostSummary extends PureComponent {
                     <div style={ summaryBodyStyle }>{ body }</div>
                 </div>
                 <div className="col-xs-12" style={ flexColumnStyle }>
-                    <PostScore
+                    <Score
                         downVoteFunction={ downVoteFunction }
                         postId={ id }
                         score={ voteScore }
                         upVoteFunction={ upVoteFunction }
                     />
-                    <PostAuthor author={ author } />
-                    <PostCommentData commentCount={ commentCount } />
-                    <PostEditDeleteButtons
+                    <Author author={ author } />
+                    <CommentData commentCount={ commentCount } />
+                    <EditDeleteButtons
                         deleteFunction={ deleteFunction }
                         postId={ id }
                     />
