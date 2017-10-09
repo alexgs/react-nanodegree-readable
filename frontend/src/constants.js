@@ -3,6 +3,7 @@ export const CATEGORY_ALL = 'all-categories';
 export const DOWNLOAD_CATEGORIES_COMPLETE = 'download-categories-complete';
 export const DOWNLOAD_COMMENTS_COMPLETE = 'download-comments-complete';
 export const DOWNLOAD_POSTS_COMPLETE = 'download-posts-complete';
+export const DOWNLOAD_ONE_COMMENT_COMPLETE = 'download-just-one-comment-complete';
 export const ERROR_SOURCE_API = 'api-error';
 export const POST_DELETE_COMPLETE = 'post-delete-complete';
 export const POST_VOTE_COMPLETE = 'post-vote-complete';

@@ -8,6 +8,7 @@ import EditDeleteButtons from './EditDeleteButtons';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import CommentList from '../Comments/CommentList';
+import { downVoteComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
@@ -56,7 +57,9 @@ class PostDetail extends PureComponent {
     constructor( props ) {
         super( props );
         this.deletePost = this.deletePost.bind( this );
+        this.downVoteComment = this.downVoteComment.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.upVoteComment = this.upVoteComment.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
     }
 
@@ -65,8 +68,7 @@ class PostDetail extends PureComponent {
     }
 
     downVoteComment( commentId ) {
-        console.log( `>>> Yikes! Down-vote comment ${commentId} <<<` );
-        // TODO
+        this.props.dispatch( downVoteComment( commentId ) );
     }
 
     downVotePost( postId ) {
@@ -74,8 +76,7 @@ class PostDetail extends PureComponent {
     }
 
     upVoteComment( commentId ) {
-        console.log( `>>> Sweet! Up-vote comment ${commentId} <<<` );
-        // TODO
+        this.props.dispatch( upVoteComment( commentId ) );
     }
 
     upVotePost( postId ) {

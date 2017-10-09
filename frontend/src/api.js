@@ -27,6 +27,16 @@ export const fetchPosts = function() {
     return getWorker( '/posts' );
 };
 
+export const sendCommentDownVote = function( commentId ) {
+    const payload = { option: 'downVote' };
+    return postWorker( '/comments/' + makeToken( 'commentId' ), payload, { commentId } );
+};
+
+export const sendCommentUpVote = function( commentId ) {
+    const payload = { option: 'upVote' };
+    return postWorker( '/comments/' + makeToken( 'commentId' ), payload, { commentId } );
+};
+
 export const sendPostDownVote = function( postId ) {
     const payload = { option: 'downVote' };
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );

@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { DOWNLOAD_COMMENTS_COMPLETE } from '../constants';
+import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE } from '../constants';
 
 const commentsByPostDefaultState = Immutable.Map();
 const commentsDataDefaultState = Immutable.Map();
@@ -33,6 +33,9 @@ export const commentsDataReducer = function( state=commentsDataDefaultState, act
                     mutableState.set( comment.id, Immutable.fromJS( comment ) );        // Add or update comment data
                 } );
             } );
+        case DOWNLOAD_ONE_COMMENT_COMPLETE:
+            const comment = action.data;
+            return state.set( comment.id, Immutable.fromJS( comment ) );
         default:
             return state;
     }

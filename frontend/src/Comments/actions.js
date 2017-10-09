@@ -1,6 +1,6 @@
-import { fetchComments } from '../api';
+import * as api from '../api';
 import { thunkPromiseChainErrorHandler } from '../utils';
-import { DOWNLOAD_COMMENTS_COMPLETE, ERROR_SOURCE_API } from '../constants';
+import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE, ERROR_SOURCE_API } from '../constants';
 
 export const downloadCommentsComplete = function( commentsList ) {
     return {
@@ -11,8 +11,32 @@ export const downloadCommentsComplete = function( commentsList ) {
 
 export const downloadCommentsStart = function( postId ) {
     return function( dispatch ) {
-        return fetchComments( postId )
+        return api.fetchComments( postId )
             .then( payload => dispatch( downloadCommentsComplete( payload ) ) )
             .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
     }
+};
+
+export const downloadOneCommentComplete = function( commentData ) {
+    return {
+        type: DOWNLOAD_ONE_COMMENT_COMPLETE,
+        data: commentData
+    };
+};
+
+export const downVoteComment = function( commentId ) {
+    return function( dispatch ) {
+        // We can get the parent post ID from the payload, if we need it
+        return api.sendCommentDownVote( commentId )
+            .then( payload => dispatch( downloadOneCommentComplete( payload ) ) )
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
+    };
+};
+
+export const upVoteComment = function( commentId ) {
+    return function( dispatch ) {
+        return api.sendCommentUpVote( commentId )
+            .then( payload => dispatch( downloadOneCommentComplete( payload ) ) )
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
+    };
 };
