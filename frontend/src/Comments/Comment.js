@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import Author from './Author';
-import FlexRow from '../General/FlexRow';
-import Score from '../Posts/Score';
+import FlexRow from '../Shared/FlexRow';
+import Score from '../Shared/Score';
 
 const commentRowStyle = {
     marginTop: 10,
@@ -32,8 +32,8 @@ class Comment extends PureComponent {
                 <FlexRow>
                     <Score
                         downVoteFunction={ downVoteFunction }
-                        postId={ id }
                         score={ voteScore }
+                        targetId={ id }
                         upVoteFunction={ upVoteFunction }
                     />
                 </FlexRow>

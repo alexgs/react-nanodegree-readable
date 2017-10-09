@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import MetadataBlock from './MetadataBlock';
+import MetadataBlock from '../Shared/MetadataBlock';
 
 const stackStyle = {
     fontSize: '50%',

@@ -19,8 +19,8 @@ const lowScoreStyle = {
 class Score extends PureComponent {
     static propTypes = {
         downVoteFunction: PropTypes.func.isRequired,
-        postId: PropTypes.string.isRequired,
         score: PropTypes.number.isRequired,
+        targetId: PropTypes.string.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
 
@@ -31,11 +31,11 @@ class Score extends PureComponent {
     }
 
     handleDownVoteClick() {
-        this.props.downVoteFunction( this.props.postId );
+        this.props.downVoteFunction( this.props.targetId );
     }
 
     handleUpVoteClick() {
-        this.props.upVoteFunction( this.props.postId );
+        this.props.upVoteFunction( this.props.targetId );
     }
 
     render() {

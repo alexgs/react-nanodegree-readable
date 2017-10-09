@@ -3,9 +3,9 @@ import React, { PureComponent } from 'react';
 import Author from './Author';
 import CommentData from './CommentData';
 import EditDeleteButtons from './EditDeleteButtons';
-import Score from './Score';
 import Title from './Title';
-import FlexRow from '../General/FlexRow';
+import FlexRow from '../Shared/FlexRow';
+import Score from '../Shared/Score';
 
 // TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
 
@@ -57,8 +57,8 @@ class PostSummary extends PureComponent {
                 <FlexRow>
                     <Score
                         downVoteFunction={ downVoteFunction }
-                        postId={ id }
                         score={ voteScore }
+                        targetId={ id }
                         upVoteFunction={ upVoteFunction }
                     />
                     <Author author={ author } />

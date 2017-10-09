@@ -5,11 +5,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Author from './Author';
 import CommentData from './CommentData';
 import EditDeleteButtons from './EditDeleteButtons';
-import Score from './Score';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import CommentList from '../Comments/CommentList';
-import FlexRow from '../General/FlexRow';
+import FlexRow from '../Shared/FlexRow';
+import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
 
 const articleStyle = {
@@ -100,8 +100,8 @@ class PostDetail extends PureComponent {
                     <FlexRow>
                         <Score
                             downVoteFunction={ this.downVotePost }
-                            postId={ postId }
                             score={ postData.get( 'voteScore' ) }
+                            targetId={ postId }
                             upVoteFunction={ this.upVotePost }
                         />
                         <Author author={ postData.get( 'author' ) } />

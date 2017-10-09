@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import MetadataBlock from './MetadataBlock';
-import MetadataButton from './MetadataButton';
+import MetadataBlock from '../Shared/MetadataBlock';
+import MetadataButton from '../Shared/MetadataButton';
 
 class PostEditDeleteButtons extends PureComponent {
     static propTypes = {

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 import CategoryRoutes from './Categories/ChildRoutes';
 import { downloadCategoriesStart } from './Categories/actions';
-import PageHeader from './General/PageHeader';
+import PageHeader from './Shared/PageHeader';
 import NavBar from './NavBar/NavBar';
 import ListView from './Posts/ListView';
 import { CATEGORY_ALL, STORE_CATEGORIES } from './constants';
