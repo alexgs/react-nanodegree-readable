@@ -9,7 +9,7 @@ export const commentsByPostReducer = function( state=commentsByPostDefaultState,
         case DOWNLOAD_COMMENTS_COMPLETE:
             return state.withMutations( mutableState => {
                 action.data.comments.forEach( comment => {
-                    // TODO Use arrays or mutable Sets to improve performance
+                    // TODO [Future] Use arrays or mutable Sets to improve performance
                     let postComments = null;
                     if ( mutableState.has( comment.parentId ) ) {
                         postComments = mutableState.get( comment.parentId );

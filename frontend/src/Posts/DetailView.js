@@ -8,8 +8,9 @@ import EditDeleteButtons from './EditDeleteButtons';
 import Score from './Score';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import CommentList from '../Comments/CommentList';
 import FlexRow from '../General/FlexRow';
-import { STORE_COMMENTS_BY_POST, STORE_POSTS_DATA } from '../constants';
+import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
 
 const articleStyle = {
     fontSize: '120%',
@@ -29,6 +30,16 @@ class PostDetail extends PureComponent {
         [STORE_COMMENTS_BY_POST]: ImmutablePropTypes.mapOf(
             ImmutablePropTypes.setOf( PropTypes.string )
         ).isRequired,
+        [STORE_COMMENTS_DATA]: ImmutablePropTypes.mapContains( {
+            author: PropTypes.string,
+            body: PropTypes.string,
+            deleted: PropTypes.bool,
+            id: PropTypes.string,
+            parentDeleted: PropTypes.bool,
+            parentId: PropTypes.string,
+            timestamp: PropTypes.number,
+            voteScore: PropTypes.number,
+        } ).isRequired,
         [STORE_POSTS_DATA]: ImmutablePropTypes.mapContains( {
             author: PropTypes.string,
             body: PropTypes.string,
@@ -105,9 +116,13 @@ class PostDetail extends PureComponent {
                             </content>
                         </div>
                     </div>
+                    <CommentList
+                        commentData={ this.props[ STORE_COMMENTS_DATA ] }
+                        commentList={ commentsByPost.get( postId ) }
+                        postId={ postId }
+                    />
                 </article>
             );
-            // TODO Display comments
         } else {
             return null;
         }
@@ -117,6 +132,7 @@ class PostDetail extends PureComponent {
 const mapStateToProps = function( state ) {
     return {
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
+        [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };
 };

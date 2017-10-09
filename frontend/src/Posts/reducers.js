@@ -11,7 +11,7 @@ export const postsByCategoryReducer = function( state=postsByCategoryDefaultStat
         case DOWNLOAD_POSTS_COMPLETE:
             return state.withMutations( mutableState => {
                 action.data.posts.forEach( post => {
-                    // TODO Use arrays or mutable Sets to improve performance
+                    // TODO [Future] Use arrays or mutable Sets to improve performance
                     let categoryPosts = null;
                     if ( mutableState.has( post.category ) ) {
                         categoryPosts = mutableState.get( post.category );
