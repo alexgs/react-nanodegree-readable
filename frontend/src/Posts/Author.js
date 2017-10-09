@@ -9,7 +9,7 @@ const nameStyle = {
     textTransform: 'uppercase'
 };
 
-class PostAuthor extends PureComponent {
+class Author extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired
     };
@@ -23,4 +23,4 @@ class PostAuthor extends PureComponent {
     }
 }
 
-export default PostAuthor;
+export default Author;

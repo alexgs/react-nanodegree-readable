@@ -119,7 +119,6 @@ class PostDetail extends PureComponent {
                     <CommentList
                         commentData={ this.props[ STORE_COMMENTS_DATA ] }
                         commentList={ commentsByPost.get( postId ) }
-                        postId={ postId }
                     />
                 </article>
             );
