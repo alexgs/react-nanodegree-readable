@@ -64,8 +64,18 @@ class PostDetail extends PureComponent {
         this.props.dispatch( deletePost( postId ) );
     }
 
+    downVoteComment( commentId ) {
+        console.log( `>>> Yikes! Down-vote comment ${commentId} <<<` );
+        // TODO
+    }
+
     downVotePost( postId ) {
         this.props.dispatch( downVotePost( postId ) );
+    }
+
+    upVoteComment( commentId ) {
+        console.log( `>>> Sweet! Up-vote comment ${commentId} <<<` );
+        // TODO
     }
 
     upVotePost( postId ) {
@@ -119,6 +129,8 @@ class PostDetail extends PureComponent {
                     <CommentList
                         commentData={ this.props[ STORE_COMMENTS_DATA ] }
                         commentList={ commentsByPost.get( postId ) }
+                        downVoteFunction={ this.downVoteComment }
+                        upVoteFunction={ this.upVoteComment }
                     />
                 </article>
             );

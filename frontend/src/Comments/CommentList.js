@@ -15,12 +15,14 @@ class CommentList extends PureComponent {
             timestamp: PropTypes.number,
             voteScore: PropTypes.number
         } ),
-        commentList: ImmutablePropTypes.setOf( PropTypes.string )
+        commentList: ImmutablePropTypes.setOf( PropTypes.string ),
+        downVoteFunction: PropTypes.func.isRequired,
+        upVoteFunction: PropTypes.func.isRequired
         // , postId: PropTypes.string.isRequired
     };
 
     render() {
-        const { commentData, commentList } = this.props;
+        const { commentData, commentList, downVoteFunction, upVoteFunction } = this.props;
         if ( !commentList || commentList.size === 0 ) {
             return null;
         }
@@ -34,9 +36,11 @@ class CommentList extends PureComponent {
                         author={ data.get( 'author' ) }
                         body={ data.get( 'body' ) }
                         deleted={ data.get( 'deleted' ) }
+                        downVoteFunction={ downVoteFunction }
                         id={ data.get( 'id' ) }
                         parentDeleted={ data.get( 'parentDeleted' ) }
                         timestamp={ data.get( 'timestamp' ) }
+                        upVoteFunction={ upVoteFunction }
                         voteScore={ data.get( 'voteScore' ) }
                     />
                 );
