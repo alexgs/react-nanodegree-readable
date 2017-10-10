@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Author from './Author';
 import CommentData from './CommentData';
-import EditDeleteButtons from './EditDeleteButtons';
+import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import CommentList from '../Comments/CommentList';
-import { downVoteComment, upVoteComment } from '../Comments/actions';
+import { deleteComment, downVoteComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
@@ -25,7 +25,7 @@ const titleStyle = {
     marginBottom: 5
 };
 
-class PostDetail extends PureComponent {
+class DetailView extends PureComponent {
     static propTypes = {
         postId: PropTypes.string.isRequired,
         [STORE_COMMENTS_BY_POST]: ImmutablePropTypes.mapOf(
@@ -56,11 +56,16 @@ class PostDetail extends PureComponent {
 
     constructor( props ) {
         super( props );
+        this.deleteComment = this.deleteComment.bind( this );
         this.deletePost = this.deletePost.bind( this );
         this.downVoteComment = this.downVoteComment.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
         this.upVoteComment = this.upVoteComment.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
+    }
+
+    deleteComment( commentId ) {
+        this.props.dispatch( deleteComment( commentId ) );
     }
 
     deletePost( postId ) {
@@ -109,7 +114,7 @@ class PostDetail extends PureComponent {
                         <CommentData commentCount={ commentCount } />
                         <EditDeleteButtons
                             deleteFunction={ this.deletePost }
-                            postId={ postId }
+                            targetId={ postId }
                         />
                     </FlexRow>
                     <div className="col-xs-12">
@@ -130,6 +135,7 @@ class PostDetail extends PureComponent {
                     <CommentList
                         commentData={ this.props[ STORE_COMMENTS_DATA ] }
                         commentList={ commentsByPost.get( postId ) }
+                        deleteFunction={ this.deleteComment }
                         downVoteFunction={ this.downVoteComment }
                         upVoteFunction={ this.upVoteComment }
                     />
@@ -149,4 +155,4 @@ const mapStateToProps = function( state ) {
     };
 };
 
-export default connect( mapStateToProps )( PostDetail );
+export default connect( mapStateToProps )( DetailView );

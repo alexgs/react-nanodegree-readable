@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import Author from './Author';
 import CommentData from './CommentData';
-import EditDeleteButtons from './EditDeleteButtons';
+import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import Title from './Title';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
@@ -20,7 +20,7 @@ const summarySectionStyle = {
     marginTop: 10
 };
 
-class PostSummary extends PureComponent {
+class Summary extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired,
         body: PropTypes.string.isRequired,
@@ -65,7 +65,7 @@ class PostSummary extends PureComponent {
                     <CommentData commentCount={ commentCount } />
                     <EditDeleteButtons
                         deleteFunction={ deleteFunction }
-                        postId={ id }
+                        targetId={ id }
                     />
                 </FlexRow>
             </section>
@@ -73,4 +73,4 @@ class PostSummary extends PureComponent {
     }
 }
 
-export default PostSummary;
+export default Summary;

@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import MetadataBlock from '../Shared/MetadataBlock';
-import MetadataButton from '../Shared/MetadataButton';
+import MetadataBlock from './MetadataBlock';
+import MetadataButton from './MetadataButton';
 
-class PostEditDeleteButtons extends PureComponent {
+class EditDeleteButtons extends PureComponent {
     static propTypes = {
         deleteFunction: PropTypes.func.isRequired,
-        postId: PropTypes.string.isRequired
+        targetId: PropTypes.string.isRequired
     };
 
     constructor( props ) {
@@ -15,7 +15,7 @@ class PostEditDeleteButtons extends PureComponent {
     }
 
     handleDeleteClick() {
-        this.props.deleteFunction( this.props.postId );
+        this.props.deleteFunction( this.props.targetId );
     }
 
     render() {
@@ -31,4 +31,4 @@ class PostEditDeleteButtons extends PureComponent {
     }
 }
 
-export default PostEditDeleteButtons;
+export default EditDeleteButtons;

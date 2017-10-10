@@ -2,6 +2,14 @@ import * as api from '../api';
 import { thunkPromiseChainErrorHandler } from '../utils';
 import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE, ERROR_SOURCE_API } from '../constants';
 
+export const deleteComment = function( commentId ) {
+    console.log( `>>> Ouch! Deleted comment ${commentId} <<<` );
+    // TODO
+    return {
+        type: 'EMPTY'
+    };
+};
+
 export const downloadCommentsComplete = function( commentsList ) {
     return {
         type: DOWNLOAD_COMMENTS_COMPLETE,
