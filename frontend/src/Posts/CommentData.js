@@ -8,7 +8,7 @@ const stackStyle = {
     verticalAlign: 'inherit'
 };
 
-class PostCommentData extends PureComponent {
+class CommentData extends PureComponent {
     static propTypes = {
         commentCount: PropTypes.number.isRequired
     };
@@ -25,4 +25,4 @@ class PostCommentData extends PureComponent {
     }
 }
 
-export default PostCommentData;
+export default CommentData;

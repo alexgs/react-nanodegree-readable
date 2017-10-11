@@ -6,6 +6,15 @@ const HEADER_CONTENT_JSON = { 'Content-Type': 'application/json' };
 
 // --- PUBLIC API METHODS ---
 
+export const deleteComment = function( commentId ) {
+    const urlPath = '/comments/' + makeToken( 'commentId' );
+    const urlOptions = { commentId };
+    const requestOptions = {
+        method: 'DELETE',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
+};
+
 export const deletePost = function( postId ) {
     const urlPath = '/posts/' + makeToken( 'postId' );
     const urlOptions = { postId };

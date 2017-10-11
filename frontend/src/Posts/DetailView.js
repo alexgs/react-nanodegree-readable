@@ -7,6 +7,7 @@ import CommentData from './CommentData';
 import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import { getCommentCount } from './utils';
 import CommentList from '../Comments/CommentList';
 import { deleteComment, downVoteComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
@@ -95,11 +96,11 @@ class DetailView extends PureComponent {
     render() {
         const allPostData = this.props[ STORE_POSTS_DATA ];
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
+        const commentData = this.props[ STORE_COMMENTS_DATA ];
         if ( allPostData.size > 0 ) {
             const postId = this.props.postId;
             const postData = allPostData.get( postId );
-            const commentsLoaded = commentsByPost.size > 0;     // Assume at least one post with at least one comment
-            const commentCount = commentsLoaded && commentsByPost.has( postId ) ? commentsByPost.get( postId ).size : 0;
+            const commentCount = getCommentCount( commentsByPost, commentData, postId );
 
             return (
                 <article className="row" style={ articleStyle }>
@@ -133,7 +134,7 @@ class DetailView extends PureComponent {
                         </div>
                     </div>
                     <CommentList
-                        commentData={ this.props[ STORE_COMMENTS_DATA ] }
+                        commentData={ commentData }
                         commentList={ commentsByPost.get( postId ) }
                         deleteFunction={ this.deleteComment }
                         downVoteFunction={ this.downVoteComment }

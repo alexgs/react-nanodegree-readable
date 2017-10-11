@@ -28,6 +28,10 @@ class CommentList extends PureComponent {
         }
 
         const commentsDisplay = commentList.toArray()
+            .filter( commentId => {
+                const data = commentData.get( commentId );
+                return !data.get( 'deleted' );
+            } )
             .map( commentId => {
                 const data = commentData.get( commentId );
                 return (

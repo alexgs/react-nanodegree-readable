@@ -4,10 +4,11 @@ import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE, ERROR_SOURCE
 
 export const deleteComment = function( commentId ) {
     console.log( `>>> Ouch! Deleted comment ${commentId} <<<` );
-    // TODO
-    return {
-        type: 'EMPTY'
-    };
+    return function( dispatch ) {
+        return api.deleteComment( commentId )
+            .then( payload => dispatch( downloadOneCommentComplete( payload ) ) )
+            .catch( thunkPromiseChainErrorHandler( ERROR_SOURCE_API ) );
+    }
 };
 
 export const downloadCommentsComplete = function( commentsList ) {
