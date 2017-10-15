@@ -8,6 +8,7 @@ import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
+import CommentForm from '../Comments/CommentForm';
 import CommentList from '../Comments/CommentList';
 import { deleteComment, downVoteComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
@@ -26,6 +27,7 @@ const titleStyle = {
     marginBottom: 5
 };
 
+// TODO A mechanism for adding a new comment is visible on the detail page and functional.
 class DetailView extends PureComponent {
     static propTypes = {
         postId: PropTypes.string.isRequired,
@@ -52,7 +54,6 @@ class DetailView extends PureComponent {
             title: PropTypes.string,
             voteScore: PropTypes.number
         } ).isRequired
-
     };
 
     constructor( props ) {
@@ -140,6 +141,7 @@ class DetailView extends PureComponent {
                         downVoteFunction={ this.downVoteComment }
                         upVoteFunction={ this.upVoteComment }
                     />
+                    <CommentForm />
                 </article>
             );
         } else {
