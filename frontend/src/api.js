@@ -56,6 +56,11 @@ export const sendPostUpVote = function( postId ) {
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
 };
 
+export const submitComment = function( commentData ) {
+    // commentData is an object with the following fields: author, body, id, parentId, timestamp
+    return postWorker( '/comments', commentData );
+};
+
 // --- PRIVATE UTILITY & HELPER FUNCTIONS ---
 
 const getWorker = function( path, urlOptions={} ) {

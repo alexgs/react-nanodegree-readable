@@ -20,6 +20,11 @@ export const commentsByPostReducer = function( state=commentsByPostDefaultState,
                     mutableState.set( comment.parentId, postComments );
                 } );
             } );
+        case DOWNLOAD_ONE_COMMENT_COMPLETE:
+            const commentData = action.data;
+            let postComments = state.get( commentData.parentId ) || Immutable.Set();
+            postComments = postComments.add( commentData.id );
+            return state.set( commentData.parentId, postComments );
         default:
             return state;
     }

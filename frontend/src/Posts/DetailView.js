@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import uuid from 'uuid/v4';
 import Author from './Author';
 import CommentData from './CommentData';
 import EditDeleteButtons from '../Shared/EditDeleteButtons';
@@ -10,7 +11,7 @@ import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './acti
 import { getCommentCount } from './utils';
 import CommentForm from '../Comments/CommentForm';
 import CommentList from '../Comments/CommentList';
-import { deleteComment, downVoteComment, upVoteComment } from '../Comments/actions';
+import { deleteComment, downVoteComment, submitComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
@@ -62,6 +63,7 @@ class DetailView extends PureComponent {
         this.deletePost = this.deletePost.bind( this );
         this.downVoteComment = this.downVoteComment.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.submitComment = this.submitComment.bind( this );
         this.upVoteComment = this.upVoteComment.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
     }
@@ -80,6 +82,18 @@ class DetailView extends PureComponent {
 
     downVotePost( postId ) {
         this.props.dispatch( downVotePost( postId ) );
+    }
+
+    submitComment( postId, author, body ) {
+        const commentId = uuid();
+        const timestamp = Date.now();
+        this.props.dispatch( submitComment( {
+            author,
+            body,
+            id: commentId,
+            parentId: postId,
+            timestamp
+        } ) );
     }
 
     upVoteComment( commentId ) {
@@ -141,7 +155,7 @@ class DetailView extends PureComponent {
                         downVoteFunction={ this.downVoteComment }
                         upVoteFunction={ this.upVoteComment }
                     />
-                    <CommentForm />
+                    <CommentForm parentPostId={ postId } submitCommentFunction={ this.submitComment } />
                 </article>
             );
         } else {
