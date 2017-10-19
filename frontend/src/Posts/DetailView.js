@@ -155,7 +155,7 @@ class DetailView extends PureComponent {
                         downVoteFunction={ this.downVoteComment }
                         upVoteFunction={ this.upVoteComment }
                     />
-                    <CommentForm parentPostId={ postId } submitCommentFunction={ this.submitComment } />
+                    <CommentForm parentPostId={ postId } submitFunction={ this.submitComment } />
                 </article>
             );
         } else {

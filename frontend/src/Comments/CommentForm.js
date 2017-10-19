@@ -5,19 +5,23 @@ const formLabelStyle = {
     fontSize: 14
 };
 
+// TODO Pass in submit function from "Comment List" component
+// TODO Fix formatting so this looks correct whether editing or adding new
+// TODO [Nice] Change title based on editing or adding
+// TODO Last 2 items --> put different wrappers around form, where wrapper controls appearance separate from form functionality
 class CommentForm extends PureComponent {
     static propTypes = {
-        commentAuthor: PropTypes.string,
-        commentBody: PropTypes.string,
+        author: PropTypes.string,
+        body: PropTypes.string,
         parentPostId: PropTypes.string.isRequired,
-        submitCommentFunction: PropTypes.func.isRequired
+        submitFunction: PropTypes.func.isRequired
     };
 
     constructor( props ) {
         super( props );
         this.state = {
-            commentAuthor: props.commentAuthor || '',
-            commentBody: props.commentBody || ''
+            author: props.author || '',
+            body: props.body || ''
         };
 
         this.handleAuthorInput = this.handleAuthorInput.bind( this );
@@ -26,22 +30,22 @@ class CommentForm extends PureComponent {
     }
 
     handleAuthorInput( event ) {
-        this.setState( { commentAuthor: event.target.value } );
+        this.setState( { author: event.target.value } );
     }
 
     handleBodyInput( event ) {
-        this.setState( { commentBody: event.target.value } );
+        this.setState( { body: event.target.value } );
     }
 
     handleSubmit( event ) {
         event.preventDefault();
         // Params: postId, author, body
-        // console.log( `<<< ${this.props.parentPostId} | ${this.state.commentAuthor} | ${this.state.commentBody} >>>` );
-        this.props.submitCommentFunction( this.props.parentPostId, this.state.commentAuthor, this.state.commentBody );
+        // console.log( `<<< ${this.props.parentPostId} | ${this.state.author} | ${this.state.body} >>>` );
+        this.props.submitFunction( this.props.parentPostId, this.state.author, this.state.body );
     }
 
     render() {
-        const { commentAuthor, commentBody } = this.state;
+        const { author, body } = this.state;
         return (
             <div className="col-xs-8" style={ { marginTop: 0 } }>
                 <h3>Add a comment</h3>
@@ -61,7 +65,7 @@ class CommentForm extends PureComponent {
                                 onChange={ this.handleAuthorInput }
                                 placeholder="Name"
                                 type="text"
-                                value={ commentAuthor }
+                                value={ author }
                             />
                         </div>
                     </div>
@@ -80,7 +84,7 @@ class CommentForm extends PureComponent {
                                 onChange={ this.handleBodyInput }
                                 placeholder="Something insightful and constructive..."
                                 type="text"
-                                value={ commentBody }
+                                value={ body }
                             />
                         </div>
                     </div>
