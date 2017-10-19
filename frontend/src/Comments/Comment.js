@@ -16,6 +16,7 @@ class Comment extends PureComponent {
         deleted: PropTypes.bool.isRequired,
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
+        editFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
         parentDeleted: PropTypes.bool.isRequired,
         timestamp: PropTypes.number.isRequired,
@@ -24,7 +25,18 @@ class Comment extends PureComponent {
     };
 
     render() {
-        const { author, body, deleted, deleteFunction, downVoteFunction, id, timestamp, upVoteFunction, voteScore } = this.props;
+        const {
+            author,
+            body,
+            deleted,
+            deleteFunction,
+            downVoteFunction,
+            editFunction,
+            id,
+            timestamp,
+            upVoteFunction,
+            voteScore
+        } = this.props;
         return (
             <div className="row" style={ commentRowStyle }>
                 <Author author={ author } />
@@ -38,7 +50,11 @@ class Comment extends PureComponent {
                         targetId={ id }
                         upVoteFunction={ upVoteFunction }
                     />
-                    <EditDeleteButtons deleteFunction={ deleteFunction } targetId={ id }/>
+                    <EditDeleteButtons
+                        deleteFunction={ deleteFunction }
+                        editFunction={ editFunction}
+                        targetId={ id }
+                    />
                 </FlexRow>
             </div>
         );

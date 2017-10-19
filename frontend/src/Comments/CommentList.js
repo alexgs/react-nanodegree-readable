@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Comment from './Comment';
 
+// TODO Comments should have a button for editing the comment.
 class CommentList extends PureComponent {
     static propTypes = {
         commentData: ImmutablePropTypes.mapContains( {
@@ -20,6 +21,21 @@ class CommentList extends PureComponent {
         downVoteFunction: PropTypes.func.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
+
+    constructor( props ) {
+        super( props );
+
+        this.editComment = this.editComment.bind( this );
+
+        // TODO Move state to Redux store
+        this.state = {
+            currentlyEditing: null
+        };
+    }
+
+    editComment( commentId ) {
+        this.setState( { currentlyEditing: commentId } );
+    }
 
     render() {
         const { commentData, commentList, deleteFunction, downVoteFunction, upVoteFunction } = this.props;
@@ -42,6 +58,7 @@ class CommentList extends PureComponent {
                         deleted={ data.get( 'deleted' ) }
                         deleteFunction={ deleteFunction }
                         downVoteFunction={ downVoteFunction }
+                        editFunction={ this.editComment }
                         id={ data.get( 'id' ) }
                         parentDeleted={ data.get( 'parentDeleted' ) }
                         timestamp={ data.get( 'timestamp' ) }
