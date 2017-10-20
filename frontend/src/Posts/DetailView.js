@@ -9,9 +9,9 @@ import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
-import CommentForm from '../Comments/CommentForm';
 import CommentList from '../Comments/CommentList';
-import { deleteComment, downVoteComment, submitComment, upVoteComment } from '../Comments/actions';
+import NewCommentContainer from '../Comments/NewCommentContainer';
+import { deleteComment, downVoteComment, editComment, submitComment, upVoteComment } from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
@@ -28,7 +28,6 @@ const titleStyle = {
     marginBottom: 5
 };
 
-// TODO A mechanism for adding a new comment is visible on the detail page and functional.
 class DetailView extends PureComponent {
     static propTypes = {
         postId: PropTypes.string.isRequired,
@@ -155,7 +154,7 @@ class DetailView extends PureComponent {
                         downVoteFunction={ this.downVoteComment }
                         upVoteFunction={ this.upVoteComment }
                     />
-                    <CommentForm parentPostId={ postId } submitFunction={ this.submitComment } />
+                    <NewCommentContainer parentPostId={ postId } submitFunction={ this.submitComment } />
                 </article>
             );
         } else {

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Comment from './Comment';
-import CommentForm from './CommentForm';
+import EditCommentContainer from './EditCommentContainer';
 
 // TODO Comments should have a button for editing the comment.
 class CommentList extends PureComponent {
@@ -62,7 +62,7 @@ class CommentList extends PureComponent {
                 const data = commentData.get( commentId );
                 if ( editCommentId && editCommentId === commentId ) {
                     return (
-                        <CommentForm
+                        <EditCommentContainer
                             author={ data.get( 'author' ) }
                             body={ data.get( 'body' ) }
                             key={ data.get( 'id') }
