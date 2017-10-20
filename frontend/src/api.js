@@ -46,6 +46,11 @@ export const sendCommentUpVote = function( commentId ) {
     return postWorker( '/comments/' + makeToken( 'commentId' ), payload, { commentId } );
 };
 
+export const sendNewComment = function( commentData ) {
+    // commentData is an object with the following fields: author, body, id, parentId, timestamp
+    return postWorker( '/comments', commentData );
+};
+
 export const sendPostDownVote = function( postId ) {
     const payload = { option: 'downVote' };
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
@@ -56,9 +61,16 @@ export const sendPostUpVote = function( postId ) {
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
 };
 
-export const submitComment = function( commentData ) {
-    // commentData is an object with the following fields: author, body, id, parentId, timestamp
-    return postWorker( '/comments', commentData );
+export const sendUpdatedComment = function( commentData, commentId ) {
+    // commentData is an object with the following fields: body, timestamp
+    const urlPath = '/comments/' + makeToken( 'commentId' );
+    const urlOptions = { commentId };
+    const requestOptions = {
+        body: JSON.stringify( commentData ),
+        headers: HEADER_CONTENT_JSON,
+        method: 'PUT',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
 };
 
 // --- PRIVATE UTILITY & HELPER FUNCTIONS ---

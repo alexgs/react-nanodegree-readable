@@ -5,14 +5,16 @@ const formLabelStyle = {
     fontSize: 14
 };
 
-// TODO Pass in submit function from "Comment List" component
+// TODO Make reset button work
 class CommentForm extends PureComponent {
     static propTypes = {
         author: PropTypes.string,
         body: PropTypes.string,
         id: PropTypes.string,
         parentId: PropTypes.string.isRequired,
-        submitFunction: PropTypes.func.isRequired
+        submitFunction: PropTypes.func.isRequired,
+        timestamp: PropTypes.number,
+        voteScore: PropTypes.number
     };
 
     constructor( props ) {
@@ -37,7 +39,18 @@ class CommentForm extends PureComponent {
 
     handleSubmit( event ) {
         event.preventDefault();
-        this.props.submitFunction( this.props.parentId, this.state.author, this.state.body, this.props.id );
+        // If an ID was passed in as props, assume we are editing
+        const newComment = !this.props.id;
+        const commentData = newComment ? {
+            author: this.state.author,
+            body: this.state.body,
+            parentId: this.props.parentId
+        } : {
+            body: this.state.body,
+            id: this.props.id,
+            timestamp: this.props.timestamp
+        };
+        this.props.submitFunction( commentData, newComment );
     }
 
     render() {

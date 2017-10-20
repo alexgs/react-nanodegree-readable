@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
@@ -11,10 +12,17 @@ import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './acti
 import { getCommentCount } from './utils';
 import CommentList from '../Comments/CommentList';
 import NewCommentContainer from '../Comments/NewCommentContainer';
-import { deleteComment, downVoteComment, editComment, submitComment, upVoteComment } from '../Comments/actions';
+import {
+    deleteComment,
+    downVoteComment,
+    editComment,
+    submitNewComment,
+    upVoteComment,
+    updateExistingComment
+} from '../Comments/actions';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
-import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_POSTS_DATA } from '../constants';
+import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_EDIT_COMMENT, STORE_POSTS_DATA } from '../constants';
 
 const articleStyle = {
     fontSize: '120%',
@@ -27,6 +35,42 @@ const titleStyle = {
     marginTop: 10,
     marginBottom: 5
 };
+
+// --- PRIVATE HELPER FUNCTIONS ---
+function handleNewCommentSubmit( commentData, dispatch ) {
+    // Check that we have necessary data
+    const requiredCommentData = {
+        author: _.isString,
+        body: _.isString,
+        parentId: _.isString
+    };
+    if ( !_.conformsTo( commentData, requiredCommentData ) ) {
+        throw new Error( `Illegal comment data: ${ JSON.stringify( commentData ) }` );
+    }
+
+    // Populate defaults and dispatch
+    const defaults = {
+        id: uuid(),
+        timestamp: Date.now()
+    };
+    const newCommentData = _.merge( {}, defaults, commentData );
+    dispatch( submitNewComment( newCommentData ) );
+}
+
+function handleEditCommentSubmit( commentData, dispatch ) {
+    // Check that we have necessary data
+    const requiredCommentData = {
+        body: _.isString,
+        id: _.isString,
+        timestamp: _.isInteger
+    };
+    if ( !_.conformsTo( commentData, requiredCommentData ) ) {
+        throw new Error( `Illegal comment data: ${ JSON.stringify( commentData ) }` );
+    }
+
+    // Dispatch
+    dispatch( updateExistingComment( commentData ) );
+}
 
 class DetailView extends PureComponent {
     static propTypes = {
@@ -62,6 +106,7 @@ class DetailView extends PureComponent {
         this.deletePost = this.deletePost.bind( this );
         this.downVoteComment = this.downVoteComment.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.editComment = this.editComment.bind( this );
         this.submitComment = this.submitComment.bind( this );
         this.upVoteComment = this.upVoteComment.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
@@ -83,12 +128,16 @@ class DetailView extends PureComponent {
         this.props.dispatch( downVotePost( postId ) );
     }
 
-    submitComment( parentId, author, body, id ) {
-        if ( id === undefined ) {
-            id = uuid();
+    editComment( commentId ) {
+        this.props.dispatch( editComment( commentId ) );
+    }
+
+    submitComment( commentData, newComment=true ) {
+        if ( newComment ) {
+            handleNewCommentSubmit( commentData, this.props.dispatch );
+        } else {
+            handleEditCommentSubmit( commentData, this.props.dispatch );
         }
-        const timestamp = Date.now();
-        this.props.dispatch( submitComment( { author, body, id, parentId, timestamp } ) );
     }
 
     upVoteComment( commentId ) {
@@ -107,6 +156,7 @@ class DetailView extends PureComponent {
         const allPostData = this.props[ STORE_POSTS_DATA ];
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
         const commentData = this.props[ STORE_COMMENTS_DATA ];
+        const editCommentId = this.props[ STORE_EDIT_COMMENT ];
         if ( allPostData.size > 0 ) {
             const postId = this.props.postId;
             const postData = allPostData.get( postId );
@@ -148,6 +198,8 @@ class DetailView extends PureComponent {
                         commentList={ commentsByPost.get( postId ) }
                         deleteFunction={ this.deleteComment }
                         downVoteFunction={ this.downVoteComment }
+                        editCommentId={ editCommentId }
+                        editFunction={ this.editComment }
                         submitFunction={ this.submitComment }
                         upVoteFunction={ this.upVoteComment }
                     />
@@ -164,6 +216,7 @@ const mapStateToProps = function( state ) {
     return {
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
+        [STORE_EDIT_COMMENT]: state.get( STORE_EDIT_COMMENT),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };
 };

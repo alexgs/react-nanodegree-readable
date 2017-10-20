@@ -8,7 +8,8 @@ class EditCommentContainer extends PureComponent {
         body: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
         parentId: PropTypes.string.isRequired,
-        submitFunction: PropTypes.func.isRequired
+        submitFunction: PropTypes.func.isRequired,
+        timestamp: PropTypes.number.isRequired
     };
 
     render() {
@@ -21,6 +22,7 @@ class EditCommentContainer extends PureComponent {
                     id={ this.props.id }
                     parentId={ this.props.parentId }
                     submitFunction={ this.props.submitFunction }
+                    timestamp={ this.props.timestamp }
                 />
             </div>
         );

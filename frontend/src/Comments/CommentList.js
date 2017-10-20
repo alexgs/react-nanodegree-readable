@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Comment from './Comment';
 import EditCommentContainer from './EditCommentContainer';
 
-// TODO Comments should have a button for editing the comment.
 class CommentList extends PureComponent {
     static propTypes = {
         commentData: ImmutablePropTypes.mapContains( {
@@ -20,24 +19,11 @@ class CommentList extends PureComponent {
         commentList: ImmutablePropTypes.setOf( PropTypes.string ),
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
+        editCommentId: PropTypes.string,
+        editFunction: PropTypes.func.isRequired,
         submitFunction: PropTypes.func.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
-
-    constructor( props ) {
-        super( props );
-
-        this.editComment = this.editComment.bind( this );
-
-        // TODO Move state to Redux store
-        this.state = {
-            currentlyEditing: null
-        };
-    }
-
-    editComment( commentId ) {
-        this.setState( { currentlyEditing: commentId } );
-    }
 
     render() {
         const {
@@ -45,13 +31,14 @@ class CommentList extends PureComponent {
             commentList,
             deleteFunction,
             downVoteFunction,
+            editCommentId,
+            editFunction,
             submitFunction,
             upVoteFunction
         } = this.props;
         if ( !commentList || commentList.size === 0 ) {
             return null;
         }
-        const editCommentId = this.state.currentlyEditing;
 
         const commentsDisplay = commentList.toArray()
             .filter( commentId => {
@@ -69,6 +56,7 @@ class CommentList extends PureComponent {
                             key={ data.get( 'id') }
                             parentId={ data.get( 'parentId' ) }
                             submitFunction={ submitFunction }
+                            timestamp={ data.get( 'timestamp' ) }
                         />
                     );
                 } else {
@@ -80,7 +68,7 @@ class CommentList extends PureComponent {
                             deleted={ data.get( 'deleted' ) }
                             deleteFunction={ deleteFunction }
                             downVoteFunction={ downVoteFunction }
-                            editFunction={ this.editComment }
+                            editFunction={ editFunction }
                             id={ data.get( 'id' ) }
                             parentDeleted={ data.get( 'parentDeleted' ) }
                             timestamp={ data.get( 'timestamp' ) }

@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE } from '../constants';
+import { DOWNLOAD_COMMENTS_COMPLETE, DOWNLOAD_ONE_COMMENT_COMPLETE, EDIT_COMMENT } from '../constants';
 
 const commentsByPostDefaultState = Immutable.Map();
 const commentsDataDefaultState = Immutable.Map();
@@ -41,6 +41,18 @@ export const commentsDataReducer = function( state=commentsDataDefaultState, act
         case DOWNLOAD_ONE_COMMENT_COMPLETE:
             const comment = action.data;
             return state.set( comment.id, Immutable.fromJS( comment ) );
+        default:
+            return state;
+    }
+};
+
+export const commentsEditReducer = function( state=null, action ) {
+    switch( action.type ) {
+        case DOWNLOAD_ONE_COMMENT_COMPLETE:
+            // An edited comment was (possibly) just saved
+            return null;
+        case EDIT_COMMENT:
+            return action.data;
         default:
             return state;
     }
