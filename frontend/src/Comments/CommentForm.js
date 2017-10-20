@@ -11,7 +11,7 @@ class CommentForm extends PureComponent {
         author: PropTypes.string,
         body: PropTypes.string,
         id: PropTypes.string,
-        parentId: PropTypes.string.isRequired,
+        parentId: PropTypes.string,
         submitFunction: PropTypes.func.isRequired,
         timestamp: PropTypes.number,
         voteScore: PropTypes.number
@@ -21,7 +21,8 @@ class CommentForm extends PureComponent {
         super( props );
         this.state = {
             author: props.author || '',
-            body: props.body || ''
+            body: props.body || '',
+            newComment: !props.id       // If an ID was passed in as props, assume we are editing an existing comment
         };
 
         this.handleAuthorInput = this.handleAuthorInput.bind( this );
@@ -39,9 +40,7 @@ class CommentForm extends PureComponent {
 
     handleSubmit( event ) {
         event.preventDefault();
-        // If an ID was passed in as props, assume we are editing
-        const newComment = !this.props.id;
-        const commentData = newComment ? {
+        const commentData = this.state.newComment ? {
             author: this.state.author,
             body: this.state.body,
             parentId: this.props.parentId
@@ -50,32 +49,37 @@ class CommentForm extends PureComponent {
             id: this.props.id,
             timestamp: this.props.timestamp
         };
-        this.props.submitFunction( commentData, newComment );
+        this.props.submitFunction( commentData, this.state.newComment );
+        // TODO Reset state
     }
 
     render() {
-        const { author, body } = this.state;
+        const { author, body, newComment } = this.state;
+        const authorField = newComment ? (
+            <div className="form-group">
+                <label
+                    className="col-xs-2 control-label"
+                    style={ formLabelStyle }
+                    htmlFor="comment-author-name"
+                >
+                    Your name
+                </label>
+                <div className="col-xs-10">
+                    <input
+                        className="form-control"
+                        id="comment-author-name"
+                        onChange={ this.handleAuthorInput }
+                        placeholder="Name"
+                        type="text"
+                        value={ author }
+                    />
+                </div>
+            </div>
+        ) : null;
+
         return (
             <form className="form-horizontal" onSubmit={ this.handleSubmit }>
-                <div className="form-group">
-                    <label
-                        className="col-xs-2 control-label"
-                        style={ formLabelStyle }
-                        htmlFor="comment-author-name"
-                    >
-                        Your name
-                    </label>
-                    <div className="col-xs-10">
-                        <input
-                            className="form-control"
-                            id="comment-author-name"
-                            onChange={ this.handleAuthorInput }
-                            placeholder="Name"
-                            type="text"
-                            value={ author }
-                        />
-                    </div>
-                </div>
+                { authorField }
                 <div className="form-group">
                     <label
                         className="col-xs-2 control-label"

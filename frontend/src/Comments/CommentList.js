@@ -54,7 +54,6 @@ class CommentList extends PureComponent {
                             body={ data.get( 'body' ) }
                             id={ data.get( 'id') }
                             key={ data.get( 'id') }
-                            parentId={ data.get( 'parentId' ) }
                             submitFunction={ submitFunction }
                             timestamp={ data.get( 'timestamp' ) }
                         />
