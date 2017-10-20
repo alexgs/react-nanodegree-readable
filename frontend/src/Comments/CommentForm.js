@@ -10,7 +10,8 @@ class CommentForm extends PureComponent {
     static propTypes = {
         author: PropTypes.string,
         body: PropTypes.string,
-        parentPostId: PropTypes.string.isRequired,
+        id: PropTypes.string,
+        parentId: PropTypes.string.isRequired,
         submitFunction: PropTypes.func.isRequired
     };
 
@@ -36,7 +37,7 @@ class CommentForm extends PureComponent {
 
     handleSubmit( event ) {
         event.preventDefault();
-        this.props.submitFunction( this.props.parentPostId, this.state.author, this.state.body );
+        this.props.submitFunction( this.props.parentId, this.state.author, this.state.body, this.props.id );
     }
 
     render() {

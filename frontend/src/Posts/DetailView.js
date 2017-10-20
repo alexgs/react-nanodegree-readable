@@ -83,16 +83,12 @@ class DetailView extends PureComponent {
         this.props.dispatch( downVotePost( postId ) );
     }
 
-    submitComment( postId, author, body ) {
-        const commentId = uuid();
+    submitComment( parentId, author, body, id ) {
+        if ( id === undefined ) {
+            id = uuid();
+        }
         const timestamp = Date.now();
-        this.props.dispatch( submitComment( {
-            author,
-            body,
-            id: commentId,
-            parentId: postId,
-            timestamp
-        } ) );
+        this.props.dispatch( submitComment( { author, body, id, parentId, timestamp } ) );
     }
 
     upVoteComment( commentId ) {
@@ -152,9 +148,10 @@ class DetailView extends PureComponent {
                         commentList={ commentsByPost.get( postId ) }
                         deleteFunction={ this.deleteComment }
                         downVoteFunction={ this.downVoteComment }
+                        submitFunction={ this.submitComment }
                         upVoteFunction={ this.upVoteComment }
                     />
-                    <NewCommentContainer parentPostId={ postId } submitFunction={ this.submitComment } />
+                    <NewCommentContainer parentId={ postId } submitFunction={ this.submitComment } />
                 </article>
             );
         } else {

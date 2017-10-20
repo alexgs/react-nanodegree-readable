@@ -4,7 +4,7 @@ import CommentForm from './CommentForm';
 
 class NewCommentContainer extends PureComponent {
     static propTypes = {
-        parentPostId: PropTypes.string.isRequired,
+        parentId: PropTypes.string.isRequired,
         submitFunction: PropTypes.func.isRequired
     };
 
@@ -13,7 +13,7 @@ class NewCommentContainer extends PureComponent {
             <div className="col-xs-8" style={ { marginTop: 0 } }>
                 <h3>Add a comment</h3>
                 <CommentForm
-                    parentPostId={ this.props.parentPostId }
+                    parentId={ this.props.parentId }
                     submitFunction={ this.props.submitFunction }
                 />
             </div>

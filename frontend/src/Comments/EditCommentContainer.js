@@ -4,9 +4,10 @@ import CommentForm from './CommentForm';
 
 class EditCommentContainer extends PureComponent {
     static propTypes = {
-        author: PropTypes.string,
-        body: PropTypes.string,
-        parentPostId: PropTypes.string.isRequired,
+        author: PropTypes.string.isRequired,
+        body: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        parentId: PropTypes.string.isRequired,
         submitFunction: PropTypes.func.isRequired
     };
 
@@ -17,7 +18,8 @@ class EditCommentContainer extends PureComponent {
                 <CommentForm
                     author={ this.props.author }
                     body={ this.props.body }
-                    parentPostId={ this.props.parentPostId }
+                    id={ this.props.id }
+                    parentId={ this.props.parentId }
                     submitFunction={ this.props.submitFunction }
                 />
             </div>

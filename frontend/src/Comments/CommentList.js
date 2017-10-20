@@ -20,7 +20,7 @@ class CommentList extends PureComponent {
         commentList: ImmutablePropTypes.setOf( PropTypes.string ),
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
-        submitCommentFunction: PropTypes.func.isRequired,
+        submitFunction: PropTypes.func.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
 
@@ -45,7 +45,7 @@ class CommentList extends PureComponent {
             commentList,
             deleteFunction,
             downVoteFunction,
-            submitCommentFunction,
+            submitFunction,
             upVoteFunction
         } = this.props;
         if ( !commentList || commentList.size === 0 ) {
@@ -65,9 +65,10 @@ class CommentList extends PureComponent {
                         <EditCommentContainer
                             author={ data.get( 'author' ) }
                             body={ data.get( 'body' ) }
+                            id={ data.get( 'id') }
                             key={ data.get( 'id') }
-                            parentPostId={ data.get( 'parentId' ) }
-                            submitFunction={ submitCommentFunction }
+                            parentId={ data.get( 'parentId' ) }
+                            submitFunction={ submitFunction }
                         />
                     );
                 } else {
