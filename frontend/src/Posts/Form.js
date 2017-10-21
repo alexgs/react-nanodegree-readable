@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import TextInput from '../Shared/TextInput';
 
 const formLabelStyle = {
     fontSize: 14
@@ -29,6 +30,7 @@ class PostForm extends PureComponent {
         this.state = this.getDefaultState();
 
         this.getDefaultState = this.getDefaultState.bind( this );
+        this.handleAuthorInput = this.handleAuthorInput.bind( this );
         this.handleBodyInput = this.handleBodyInput.bind( this );
     }
 
@@ -41,6 +43,10 @@ class PostForm extends PureComponent {
             timestamp: this.props.timestamp || '',
             title: this.props.title || ''
         };
+    }
+
+    handleAuthorInput( event ) {
+        this.setState( { author: event.target.value } );
     }
 
     handleBodyInput( event ) {
@@ -77,25 +83,20 @@ class PostForm extends PureComponent {
         // The following fields are needed for submitting a new post: author, body, category, title
         return (
             <form className="form-horizontal" onSubmit={ this.handleSubmit }>
-                <div className="form-group">
-                    <label
-                        className="col-xs-2 control-label"
-                        style={ formLabelStyle }
-                        htmlFor="post-body"
-                    >
-                        Post Content:
-                    </label>
-                    <div className="col-xs-10">
-                        <input
-                            className="form-control"
-                            id="post-body"
-                            onChange={ this.handleBodyInput }
-                            placeholder="Something insightful and constructive..."
-                            type="text"
-                            value={ body }
-                        />
-                    </div>
-                </div>
+                <TextInput
+                    htmlId="post-author"
+                    label="Your Name"
+                    onChangeFunction={ this.handleAuthorInput }
+                    placeholder="Name"
+                    value={ author }
+                />
+                <TextInput
+                    htmlId="post-body"
+                    label="Post Content"
+                    onChangeFunction={ this.handleBodyInput }
+                    placeholder="Something insightful and constructive..."
+                    value={ body }
+                />
             </form>
         );
     }

@@ -63,6 +63,7 @@ class CommentForm extends PureComponent {
     }
 
     render() {
+        // TODO Refactor to use '../Shared/TextInput' components
         const { author, body, newComment } = this.state;
         const authorField = newComment ? (
             <div className="form-group">
