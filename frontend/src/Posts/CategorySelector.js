@@ -19,6 +19,13 @@ class CategorySelector extends PureComponent {
 
     render() {
         const { htmlId, onChangeFunction, value } = this.props;
+
+        const categoryOptions = this.props.categories.map( categoryData => {
+            const path = categoryData.get( 'path' );
+            const name = categoryData.get( 'name' );
+            return ( <option key={ path } value={ path }>{ name }</option> );
+        } );
+
         return (
             <div className="form-group">
                 <label
@@ -31,7 +38,7 @@ class CategorySelector extends PureComponent {
                 <div className="col-xs-10">
                     <select className="form-control" id={ htmlId } onChange={ onChangeFunction } value={ value }>
                         <option value="select" disabled>Select...</option>
-                        <option value="react">React</option>
+                        { categoryOptions }
                     </select>
                 </div>
             </div>
