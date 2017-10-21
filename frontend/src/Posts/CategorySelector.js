@@ -37,7 +37,7 @@ class CategorySelector extends PureComponent {
                 </label>
                 <div className="col-xs-10">
                     <select className="form-control" id={ htmlId } onChange={ onChangeFunction } value={ value }>
-                        <option value="select" disabled>Select...</option>
+                        <option value="select" disabled default>Select...</option>
                         { categoryOptions }
                     </select>
                 </div>
