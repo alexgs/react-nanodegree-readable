@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import { deletePost, downloadPostsStart, downVotePost, submitNewPost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
 import {
     CATEGORY_ALL,
@@ -90,7 +91,7 @@ class ListView extends PureComponent {
     }
 
     submitNewPost( postData ) {
-        // The following fields are needed for submitting a new post: author, body, category, title
+        // `postData` is an object with the following fields: author, body, category, title
         const postDataSchema = {
             author: _.isString,
             body: _.isString,
@@ -101,8 +102,13 @@ class ListView extends PureComponent {
             throw new Error( `Illegal post data: ${ JSON.stringify( postData ) }` );
         }
 
-        const { author, body, category, title } = postData;
-        console.log( `=== Post data: ${author} : ${title} : ${body} : ${category} ===` );
+        // Populate defaults and dispatch
+        const defaults = {
+            id: uuid(),
+            timestamp: Date.now()
+        };
+        const newPostData = _.merge( {}, defaults, postData );
+        this.props.dispatch( submitNewPost( newPostData ) );
     }
 
     upVotePost( postId ) {

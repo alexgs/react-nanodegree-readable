@@ -7,6 +7,7 @@ export const DOWNLOAD_ONE_COMMENT_COMPLETE = 'download-just-one-comment-complete
 export const EDIT_COMMENT = 'edit-comment';
 export const ERROR_SOURCE_API = 'api-error';
 export const POST_DELETE_COMPLETE = 'post-delete-complete';
+export const POST_SUBMIT_NEW_COMPLETE = 'submit-new-post-complete';
 export const POST_VOTE_COMPLETE = 'post-vote-complete';
 export const STORE_CATEGORIES = 'categories';
 export const STORE_COMMENTS_BY_POST = 'comments-by-post';

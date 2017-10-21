@@ -1,7 +1,12 @@
 import Immutable from 'immutable';
 import store from '../store';
 import { downloadCommentsStart } from '../Comments/actions';
-import { DOWNLOAD_POSTS_COMPLETE, POST_DELETE_COMPLETE, POST_VOTE_COMPLETE } from '../constants';
+import {
+    DOWNLOAD_POSTS_COMPLETE,
+    POST_DELETE_COMPLETE,
+    POST_SUBMIT_NEW_COMPLETE,
+    POST_VOTE_COMPLETE
+} from '../constants';
 
 const postsByCategoryDefaultState = Immutable.Map();
 const postsDataDefaultState = Immutable.Map();
@@ -12,16 +17,16 @@ export const postsByCategoryReducer = function( state=postsByCategoryDefaultStat
             return state.withMutations( mutableState => {
                 action.data.posts.forEach( post => {
                     // TODO [Future] Use arrays or mutable Sets to improve performance
-                    let categoryPosts = null;
-                    if ( mutableState.has( post.category ) ) {
-                        categoryPosts = mutableState.get( post.category );
-                    } else {
-                        categoryPosts = Immutable.Set();
-                    }
+                    let categoryPosts = mutableState.get( post.category ) || Immutable.Set();
                     categoryPosts = categoryPosts.add( post.id );
                     mutableState.set( post.category, categoryPosts );
                 } );
             } );
+        case POST_SUBMIT_NEW_COMPLETE:
+            const postData = action.data;
+            let categoryPosts = state.get( postData.category ) || Immutable.Set();
+            categoryPosts = categoryPosts.add( postData.id );
+            return state.set( postData.category, categoryPosts );
         default:
             return state;
     }
@@ -36,7 +41,8 @@ export const postsDataReducer = function( state=postsDataDefaultState, action ) 
                     store.dispatch( downloadCommentsStart( post.id ) );
                 } );
             } );
-        case POST_DELETE_COMPLETE:      // Fall-through
+        case POST_DELETE_COMPLETE:      // fall-through
+        case POST_SUBMIT_NEW_COMPLETE:  // fall-through
         case POST_VOTE_COMPLETE:
             const post = action.data;
             return state.set( post.id, Immutable.fromJS( post ) );

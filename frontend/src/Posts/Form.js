@@ -4,8 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import CategorySelector from './CategorySelector';
 import TextInput from '../Shared/TextInput';
 
-// TODO Application has a form for creating a new post.
-// TODO Submitting the form properly adds the post to the correct category.
 class PostForm extends PureComponent {
     static propTypes = {
         author: PropTypes.string,
