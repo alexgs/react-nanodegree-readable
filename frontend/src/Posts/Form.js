@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import CategorySelector from './CategorySelector';
 import TextInput from '../Shared/TextInput';
-
-const formLabelStyle = {
-    fontSize: 14
-};
 
 // TODO Application has a form for creating a new post.
 // TODO Submitting the form properly adds the post to the correct category.
@@ -21,7 +18,7 @@ class PostForm extends PureComponent {
         id: PropTypes.string,
         new: PropTypes.bool.isRequired,
         submitFunction: PropTypes.func.isRequired,
-        timestamp: PropTypes.number,
+        // timestamp: PropTypes.number,
         title: PropTypes.string
     };
 
@@ -32,8 +29,10 @@ class PostForm extends PureComponent {
         this.getDefaultState = this.getDefaultState.bind( this );
         this.handleAuthorInput = this.handleAuthorInput.bind( this );
         this.handleBodyInput = this.handleBodyInput.bind( this );
+        this.handleCategoryChange = this.handleCategoryChange.bind( this );
         this.handleResetClick = this.handleResetClick.bind( this );
         this.handleSubmit = this.handleSubmit.bind( this );
+        this.handleTitleInput = this.handleTitleInput.bind( this );
     }
 
     getDefaultState() {
@@ -42,7 +41,7 @@ class PostForm extends PureComponent {
             body: this.props.body || '',
             category: this.props.category || '',
             id: this.props.id || '',
-            timestamp: this.props.timestamp || '',
+            // timestamp: this.props.timestamp || '',
             title: this.props.title || ''
         };
     }
@@ -53,6 +52,10 @@ class PostForm extends PureComponent {
 
     handleBodyInput( event ) {
         this.setState( { body: event.target.value } );
+    }
+
+    handleCategoryChange( event ) {
+        this.setState( { category: event.target.value } );
     }
 
     handleResetClick( event ) {
@@ -84,8 +87,12 @@ class PostForm extends PureComponent {
         this.setState( this.getDefaultState() );
     }
 
+    handleTitleInput( event ) {
+        this.setState( { title: event.target.value } );
+    }
+
     render() {
-        const { author, body } = this.state;
+        const { author, body, category, title } = this.state;
         const newPost = this.props.new;
 
         return (
@@ -98,11 +105,24 @@ class PostForm extends PureComponent {
                     value={ author }
                 />
                 <TextInput
+                    htmlId="post-title"
+                    label="Title"
+                    onChangeFunction={ this.handleTitleInput }
+                    placeholder="Dazzle your audience!"
+                    value={ title }
+                />
+                <TextInput
                     htmlId="post-body"
                     label="Post Content"
                     onChangeFunction={ this.handleBodyInput }
                     placeholder="Something insightful and constructive..."
                     value={ body }
+                />
+                <CategorySelector
+                    categories={ this.props.categories }
+                    htmlId="post-category"
+                    onChangeFunction={ this.handleCategoryChange }
+                    value={ category }
                 />
                 <div className="form-group">
                     <div className="col-xs-12 text-right">
