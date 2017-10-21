@@ -6,6 +6,15 @@ const HEADER_CONTENT_JSON = { 'Content-Type': 'application/json' };
 
 // --- PUBLIC API METHODS ---
 
+export const deleteComment = function( commentId ) {
+    const urlPath = '/comments/' + makeToken( 'commentId' );
+    const urlOptions = { commentId };
+    const requestOptions = {
+        method: 'DELETE',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
+};
+
 export const deletePost = function( postId ) {
     const urlPath = '/posts/' + makeToken( 'postId' );
     const urlOptions = { postId };
@@ -27,6 +36,21 @@ export const fetchPosts = function() {
     return getWorker( '/posts' );
 };
 
+export const sendCommentDownVote = function( commentId ) {
+    const payload = { option: 'downVote' };
+    return postWorker( '/comments/' + makeToken( 'commentId' ), payload, { commentId } );
+};
+
+export const sendCommentUpVote = function( commentId ) {
+    const payload = { option: 'upVote' };
+    return postWorker( '/comments/' + makeToken( 'commentId' ), payload, { commentId } );
+};
+
+export const sendNewComment = function( commentData ) {
+    // commentData is an object with the following fields: author, body, id, parentId, timestamp
+    return postWorker( '/comments', commentData );
+};
+
 export const sendPostDownVote = function( postId ) {
     const payload = { option: 'downVote' };
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
@@ -35,6 +59,18 @@ export const sendPostDownVote = function( postId ) {
 export const sendPostUpVote = function( postId ) {
     const payload = { option: 'upVote' };
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );
+};
+
+export const sendUpdatedComment = function( commentData, commentId ) {
+    // commentData is an object with the following fields: body, timestamp
+    const urlPath = '/comments/' + makeToken( 'commentId' );
+    const urlOptions = { commentId };
+    const requestOptions = {
+        body: JSON.stringify( commentData ),
+        headers: HEADER_CONTENT_JSON,
+        method: 'PUT',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
 };
 
 // --- PRIVATE UTILITY & HELPER FUNCTIONS ---

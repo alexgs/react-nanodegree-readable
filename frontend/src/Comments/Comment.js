@@ -1,36 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import Author from './Author';
-import CommentData from './CommentData';
 import EditDeleteButtons from '../Shared/EditDeleteButtons';
-import Title from './Title';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 
-// TODO (1) Listed posts are displayed with ... (f) buttons or links for editing ... the post
-
-const summaryBodyStyle = {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
+const commentRowStyle = {
+    marginTop: 10,
 };
 
-const summarySectionStyle = {
-    fontSize: '120%',
-    marginTop: 10
-};
-
-class Summary extends PureComponent {
+class Comment extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired,
         body: PropTypes.string.isRequired,
-        category: PropTypes.string.isRequired,
-        commentCount: PropTypes.number.isRequired,
+        deleted: PropTypes.bool.isRequired,
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
+        editFunction: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired,
+        parentDeleted: PropTypes.bool.isRequired,
         timestamp: PropTypes.number.isRequired,
-        title: PropTypes.string.isRequired,
         upVoteFunction: PropTypes.func.isRequired,
         voteScore: PropTypes.number.isRequired
     };
@@ -39,21 +28,21 @@ class Summary extends PureComponent {
         const {
             author,
             body,
-            category,
-            commentCount,
+            deleted,
             deleteFunction,
             downVoteFunction,
+            editFunction,
             id,
-            title,
+            timestamp,
             upVoteFunction,
             voteScore
         } = this.props;
         return (
-            <section className="row" style={ summarySectionStyle }>
-                <FlexRow>
-                    <Title category={ category } postId={ id } title={ title } />
-                    <div style={ summaryBodyStyle }>{ body }</div>
-                </FlexRow>
+            <div className="row" style={ commentRowStyle }>
+                <Author author={ author } />
+                <div className="col-xs-12">
+                    { body }
+                </div>
                 <FlexRow>
                     <Score
                         downVoteFunction={ downVoteFunction }
@@ -61,16 +50,15 @@ class Summary extends PureComponent {
                         targetId={ id }
                         upVoteFunction={ upVoteFunction }
                     />
-                    <Author author={ author } />
-                    <CommentData commentCount={ commentCount } />
                     <EditDeleteButtons
                         deleteFunction={ deleteFunction }
+                        editFunction={ editFunction}
                         targetId={ id }
                     />
                 </FlexRow>
-            </section>
+            </div>
         );
-    }
+    };
 }
 
-export default Summary;
+export default Comment;

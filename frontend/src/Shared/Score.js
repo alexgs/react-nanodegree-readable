@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
-import { secondRowBlockStyle, summaryButtonStyle } from './Summary';
+import MetadataBlock from './MetadataBlock';
+import MetadataButton from './MetadataButton';
 
 const defaultScoreStyle = {
     fontWeight: 'bold'
@@ -15,11 +16,11 @@ const lowScoreStyle = {
     color: 'lightgrey'
 };
 
-class PostScore extends PureComponent {
+class Score extends PureComponent {
     static propTypes = {
         downVoteFunction: PropTypes.func.isRequired,
-        postId: PropTypes.string.isRequired,
         score: PropTypes.number.isRequired,
+        targetId: PropTypes.string.isRequired,
         upVoteFunction: PropTypes.func.isRequired
     };
 
@@ -30,11 +31,11 @@ class PostScore extends PureComponent {
     }
 
     handleDownVoteClick() {
-        this.props.downVoteFunction( this.props.postId );
+        this.props.downVoteFunction( this.props.targetId );
     }
 
     handleUpVoteClick() {
-        this.props.upVoteFunction( this.props.postId );
+        this.props.upVoteFunction( this.props.targetId );
     }
 
     render() {
@@ -45,30 +46,21 @@ class PostScore extends PureComponent {
         } else if ( score > 2 ) {
             scoreStyle = _.merge( {}, defaultScoreStyle, highScoreStyle );
         }       // else use default style
+
         return (
-            <div style={ secondRowBlockStyle }>
+            <MetadataBlock>
                 Score: <span style={ scoreStyle }>{ score }</span>
                 &nbsp;
-                <button
-                    className="btn btn-link"
-                    style={ summaryButtonStyle }
-                    type="button"
-                    onClick={ this.handleUpVoteClick }
-                >
+                <MetadataButton clickFunction={ this.handleUpVoteClick }>
                     <span className="fa fa-thumbs-o-up" />
-                </button>
+                </MetadataButton>
                 &nbsp;
-                <button
-                    className="btn btn-link"
-                    style={ summaryButtonStyle }
-                    type="button"
-                    onClick={ this.handleDownVoteClick }
-                >
+                <MetadataButton clickFunction={ this.handleDownVoteClick }>
                     <span className="fa fa-thumbs-o-down" />
-                </button>
-            </div>
+                </MetadataButton>
+            </MetadataBlock>
         )
     }
 }
 
-export default PostScore;
+export default Score;

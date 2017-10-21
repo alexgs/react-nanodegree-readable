@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import Summary from './Summary';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
-import PostSummary from './Summary';
+import { getCommentCount } from './utils';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,
     STORE_COMMENTS_BY_POST,
+    STORE_COMMENTS_DATA,
     STORE_POSTS_BY_CATEGORY,
     STORE_POSTS_DATA
 } from '../constants';
@@ -38,6 +40,16 @@ class ListView extends PureComponent {
         [STORE_COMMENTS_BY_POST]: ImmutablePropTypes.mapOf(
             ImmutablePropTypes.setOf( PropTypes.string )
         ).isRequired,
+        [STORE_COMMENTS_DATA]: ImmutablePropTypes.mapContains( {
+            author: PropTypes.string,
+            body: PropTypes.string,
+            deleted: PropTypes.bool,
+            id: PropTypes.string,
+            parentDeleted: PropTypes.bool,
+            parentId: PropTypes.string,
+            timestamp: PropTypes.number,
+            voteScore: PropTypes.number,
+        } ).isRequired,
         [STORE_POSTS_BY_CATEGORY]: ImmutablePropTypes.mapOf(
             ImmutablePropTypes.setOf( PropTypes.string )
         ).isRequired,
@@ -99,7 +111,6 @@ class ListView extends PureComponent {
         }
 
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const commentsLoaded = commentsByPost.size > 0;   // Assume there is at least one post with at least one comment
         const postSummaries = postIds
             .filter( id => {
                 const data = postData.get( id );
@@ -108,10 +119,9 @@ class ListView extends PureComponent {
             .map( id => {
                 const data = postData.get( id );
                 const postId = data.get( 'id' );
-                const commentCount = commentsLoaded && commentsByPost.has( postId )
-                    ? commentsByPost.get( postId ).size : 0;
+                const commentCount = getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
                 return (
-                    <PostSummary
+                    <Summary
                         key={ postId }
                         author={ data.get( 'author' ) }
                         body={ data.get( 'body' ) }
@@ -141,9 +151,14 @@ class ListView extends PureComponent {
     }
 }
 
-export default connect( state => ({
-    categories: state.get( STORE_CATEGORIES ),
-    [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
-    [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
-    [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
-}) )( ListView );
+const mapStateToProps = function( state ) {
+    return {
+        categories: state.get( STORE_CATEGORIES ),
+        [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
+        [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
+        [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
+        [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
+    };
+};
+
+export default connect( mapStateToProps )( ListView );

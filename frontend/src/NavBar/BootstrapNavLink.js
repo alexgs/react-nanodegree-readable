@@ -9,6 +9,7 @@ class BootstrapNavLink extends Component {
 
     render() {
         return (
+            // TODO [Nice] Make the category active when viewing a post in that category
             <Route
                 path={ this.props.to }
                 children={ ({ location }) => {

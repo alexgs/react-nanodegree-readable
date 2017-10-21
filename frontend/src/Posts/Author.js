@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle } from './Summary';
+import MetadataBlock from '../Shared/MetadataBlock';
 
 const nameStyle = {
     color: 'maroon',
@@ -9,18 +9,18 @@ const nameStyle = {
     textTransform: 'uppercase'
 };
 
-class PostAuthor extends PureComponent {
+class Author extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired
     };
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>
+            <MetadataBlock>
                 Author: <span style={ nameStyle }>{ this.props.author }</span>
-            </div>
+            </MetadataBlock>
         )
     }
 }
 
-export default PostAuthor;
+export default Author;

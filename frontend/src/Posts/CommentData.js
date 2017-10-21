@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { secondRowBlockStyle } from './Summary';
+import MetadataBlock from '../Shared/MetadataBlock';
 
 const stackStyle = {
     fontSize: '50%',
@@ -8,21 +8,21 @@ const stackStyle = {
     verticalAlign: 'inherit'
 };
 
-class PostCommentData extends PureComponent {
+class CommentData extends PureComponent {
     static propTypes = {
         commentCount: PropTypes.number.isRequired
     };
 
     render() {
         return (
-            <div style={ secondRowBlockStyle }>Comments: { this.props.commentCount }
+            <MetadataBlock>Comments: { this.props.commentCount }
                 <span className="fa-stack" style={ stackStyle }>
                     <span className="fa fa-comment-o fa-stack-2x" />
                     <span className="fa fa-plus fa-stack-1x" />
                 </span>
-            </div>
+            </MetadataBlock>
         );
     }
 }
 
-export default PostCommentData;
+export default CommentData;
