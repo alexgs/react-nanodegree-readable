@@ -12,8 +12,7 @@ class CommentForm extends PureComponent {
         id: PropTypes.string,
         parentId: PropTypes.string,
         submitFunction: PropTypes.func.isRequired,
-        timestamp: PropTypes.number,
-        voteScore: PropTypes.number
+        timestamp: PropTypes.number
     };
 
     constructor( props ) {
@@ -64,6 +63,7 @@ class CommentForm extends PureComponent {
     }
 
     render() {
+        // TODO [Nice] Refactor to use '../Shared/TextInput' components
         const { author, body, newComment } = this.state;
         const authorField = newComment ? (
             <div className="form-group">

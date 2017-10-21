@@ -13,7 +13,6 @@ class Comment extends PureComponent {
     static propTypes = {
         author: PropTypes.string.isRequired,
         body: PropTypes.string.isRequired,
-        deleted: PropTypes.bool.isRequired,
         deleteFunction: PropTypes.func.isRequired,
         downVoteFunction: PropTypes.func.isRequired,
         editFunction: PropTypes.func.isRequired,
@@ -28,12 +27,11 @@ class Comment extends PureComponent {
         const {
             author,
             body,
-            deleted,
             deleteFunction,
             downVoteFunction,
             editFunction,
             id,
-            timestamp,
+            // timestamp,
             upVoteFunction,
             voteScore
         } = this.props;

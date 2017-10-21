@@ -51,6 +51,10 @@ export const sendNewComment = function( commentData ) {
     return postWorker( '/comments', commentData );
 };
 
+export const sendNewPost = function( postData ) {
+    return postWorker( '/posts', postData );
+};
+
 export const sendPostDownVote = function( postId ) {
     const payload = { option: 'downVote' };
     return postWorker( '/posts/' + makeToken( 'postId' ), payload, { postId } );

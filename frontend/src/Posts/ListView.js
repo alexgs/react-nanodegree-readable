@@ -1,10 +1,13 @@
 import Immutable from 'immutable';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import uuid from 'uuid/v4';
+import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
+import { deletePost, downloadPostsStart, downVotePost, submitNewPost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
 import {
     CATEGORY_ALL,
@@ -69,6 +72,8 @@ class ListView extends PureComponent {
         super( props );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.submitModifiedPost = this.submitModifiedPost.bind( this );
+        this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
     }
 
@@ -78,6 +83,32 @@ class ListView extends PureComponent {
 
     downVotePost( postId ) {
         this.props.dispatch( downVotePost( postId ) );
+    }
+
+    submitModifiedPost() {
+        // The following fields are needed for editing an existing post: body, ID, title
+        // TODO
+    }
+
+    submitNewPost( postData ) {
+        // `postData` is an object with the following fields: author, body, category, title
+        const postDataSchema = {
+            author: _.isString,
+            body: _.isString,
+            category: _.isString,
+            title: _.isString
+        };
+        if ( !_.conformsTo( postData, postDataSchema ) ) {
+            throw new Error( `Illegal post data: ${ JSON.stringify( postData ) }` );
+        }
+
+        // Populate defaults and dispatch
+        const defaults = {
+            id: uuid(),
+            timestamp: Date.now()
+        };
+        const newPostData = _.merge( {}, defaults, postData );
+        this.props.dispatch( submitNewPost( newPostData ) );
     }
 
     upVotePost( postId ) {
@@ -146,6 +177,7 @@ class ListView extends PureComponent {
                     </div>
                 </div>
                 { postSummaries }
+                <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
             </div>
         );
     }
