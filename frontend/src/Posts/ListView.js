@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -84,11 +85,24 @@ class ListView extends PureComponent {
     }
 
     submitModifiedPost() {
-
+        // The following fields are needed for editing an existing post: body, ID, title
+        // TODO
     }
 
-    submitNewPost() {
+    submitNewPost( postData ) {
+        // The following fields are needed for submitting a new post: author, body, category, title
+        const postDataSchema = {
+            author: _.isString,
+            body: _.isString,
+            category: _.isString,
+            title: _.isString
+        };
+        if ( !_.conformsTo( postData, postDataSchema ) ) {
+            throw new Error( `Illegal post data: ${ JSON.stringify( postData ) }` );
+        }
 
+        const { author, body, category, title } = postData;
+        console.log( `=== Post data: ${author} : ${title} : ${body} : ${category} ===` );
     }
 
     upVotePost( postId ) {
