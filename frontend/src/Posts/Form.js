@@ -18,7 +18,6 @@ class PostForm extends PureComponent {
         id: PropTypes.string,
         new: PropTypes.bool.isRequired,
         submitFunction: PropTypes.func.isRequired,
-        // timestamp: PropTypes.number,
         title: PropTypes.string
     };
 
@@ -41,7 +40,6 @@ class PostForm extends PureComponent {
             body: this.props.body || '',
             category: this.props.category || '',
             id: this.props.id || '',
-            // timestamp: this.props.timestamp || '',
             title: this.props.title || ''
         };
     }
@@ -93,48 +91,66 @@ class PostForm extends PureComponent {
 
     render() {
         const { author, body, category, title } = this.state;
-        const newPost = this.props.new;
-
-        return (
-            <form className="form-horizontal" onSubmit={ this.handleSubmit }>
-                <TextInput
-                    htmlId="post-author"
-                    label="Your Name"
-                    onChangeFunction={ this.handleAuthorInput }
-                    placeholder="Name"
-                    value={ author }
-                />
-                <TextInput
-                    htmlId="post-title"
-                    label="Title"
-                    onChangeFunction={ this.handleTitleInput }
-                    placeholder="Dazzle your audience!"
-                    value={ title }
-                />
-                <TextInput
-                    htmlId="post-body"
-                    label="Post Content"
-                    onChangeFunction={ this.handleBodyInput }
-                    placeholder="Something insightful and constructive..."
-                    value={ body }
-                />
-                <CategorySelector
-                    categories={ this.props.categories }
-                    htmlId="post-category"
-                    onChangeFunction={ this.handleCategoryChange }
-                    value={ category }
-                />
-                <div className="form-group">
-                    <div className="col-xs-12 text-right">
-                        <button type="button" className="btn btn-default" onClick={ this.handleResetClick }>
-                            Reset
-                        </button>
-                        &nbsp;&nbsp;
-                        <button type="submit" className="btn btn-primary">Post</button>
-                    </div>
+        const fields = {
+            author: <TextInput
+                htmlId="post-author"
+                label="Your Name"
+                onChangeFunction={ this.handleAuthorInput }
+                placeholder="Name"
+                value={ author }
+            />,
+            body: <TextInput
+                htmlId="post-body"
+                label="Post Content"
+                onChangeFunction={ this.handleBodyInput }
+                placeholder="Something insightful and constructive..."
+                value={ body }
+            />,
+            category: <CategorySelector
+                categories={ this.props.categories }
+                htmlId="post-category"
+                onChangeFunction={ this.handleCategoryChange }
+                value={ category }
+            />,
+            title: <TextInput
+                htmlId="post-title"
+                label="Title"
+                onChangeFunction={ this.handleTitleInput }
+                placeholder="Dazzle your audience!"
+                value={ title }
+            />
+        };
+        const buttons = (
+            <div className="form-group">
+                <div className="col-xs-12 text-right">
+                    <button type="button" className="btn btn-default" onClick={ this.handleResetClick }>
+                        Reset
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="submit" className="btn btn-primary">Post</button>
                 </div>
-            </form>
+            </div>
         );
+
+        if ( this.props.new ) {
+            return (
+                <form className="form-horizontal" onSubmit={ this.handleSubmit }>
+                    { fields.author }
+                    { fields.title }
+                    { fields.body }
+                    { fields.category }
+                    { buttons }
+                </form>
+            );
+        } else {
+            return (
+                <form className="form-horizontal" onSubmit={ this.handleSubmit }>
+                    { fields.title }
+                    { fields.body }
+                    { buttons }
+                </form>
+            );
+        }
     }
 }
 
