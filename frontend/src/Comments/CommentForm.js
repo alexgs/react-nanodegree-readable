@@ -5,7 +5,6 @@ const formLabelStyle = {
     fontSize: 14
 };
 
-// TODO Make reset button work
 class CommentForm extends PureComponent {
     static propTypes = {
         author: PropTypes.string,
@@ -19,15 +18,21 @@ class CommentForm extends PureComponent {
 
     constructor( props ) {
         super( props );
-        this.state = {
-            author: props.author || '',
-            body: props.body || '',
-            newComment: !props.id       // If an ID was passed in as props, assume we are editing an existing comment
-        };
+        this.state = this.getDefaultState();
 
+        this.getDefaultState = this.getDefaultState.bind( this );
         this.handleAuthorInput = this.handleAuthorInput.bind( this );
         this.handleBodyInput = this.handleBodyInput.bind( this );
+        this.handleResetClick = this.handleResetClick.bind( this );
         this.handleSubmit = this.handleSubmit.bind( this );
+    }
+
+    getDefaultState() {
+        return {
+            author: this.props.author || '',
+            body: this.props.body || '',
+            newComment: !this.props.id       // If an ID was passed in as props, assume we are editing an existing comment
+        }
     }
 
     handleAuthorInput( event ) {
@@ -36,6 +41,11 @@ class CommentForm extends PureComponent {
 
     handleBodyInput( event ) {
         this.setState( { body: event.target.value } );
+    }
+
+    handleResetClick( event ) {
+        event.preventDefault();
+        this.setState( this.getDefaultState() );
     }
 
     handleSubmit( event ) {
@@ -50,7 +60,7 @@ class CommentForm extends PureComponent {
             timestamp: this.props.timestamp
         };
         this.props.submitFunction( commentData, this.state.newComment );
-        // TODO Reset state
+        this.setState( this.getDefaultState() );
     }
 
     render() {
@@ -101,7 +111,9 @@ class CommentForm extends PureComponent {
                 </div>
                 <div className="form-group">
                     <div className="col-xs-12 text-right">
-                        <button type="button" className="btn btn-default">Reset</button>
+                        <button type="button" className="btn btn-default" onClick={ this.handleResetClick }>
+                            Reset
+                        </button>
                         &nbsp;&nbsp;
                         <button type="submit" className="btn btn-primary">Post</button>
                     </div>
