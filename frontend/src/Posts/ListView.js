@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
@@ -69,6 +70,8 @@ class ListView extends PureComponent {
         super( props );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.submitModifiedPost = this.submitModifiedPost.bind( this );
+        this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
     }
 
@@ -78,6 +81,14 @@ class ListView extends PureComponent {
 
     downVotePost( postId ) {
         this.props.dispatch( downVotePost( postId ) );
+    }
+
+    submitModifiedPost() {
+
+    }
+
+    submitNewPost() {
+
     }
 
     upVotePost( postId ) {
@@ -146,6 +157,7 @@ class ListView extends PureComponent {
                     </div>
                 </div>
                 { postSummaries }
+                <NewPostContainer categories={ undefined } submitFunction={ this.submitNewPost } />
             </div>
         );
     }

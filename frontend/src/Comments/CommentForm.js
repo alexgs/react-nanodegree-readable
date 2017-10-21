@@ -12,8 +12,7 @@ class CommentForm extends PureComponent {
         id: PropTypes.string,
         parentId: PropTypes.string,
         submitFunction: PropTypes.func.isRequired,
-        timestamp: PropTypes.number,
-        voteScore: PropTypes.number
+        timestamp: PropTypes.number
     };
 
     constructor( props ) {
