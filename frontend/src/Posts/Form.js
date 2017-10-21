@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const formLabelStyle = {
     fontSize: 14
@@ -11,7 +12,10 @@ class PostForm extends PureComponent {
     static propTypes = {
         author: PropTypes.string,
         body: PropTypes.string,
-        categories: PropTypes.any.isRequired,
+        categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
+            name: PropTypes.string.isRequired,
+            path: PropTypes.string.isRequired
+        } ) ).isRequired,
         category: PropTypes.any,
         id: PropTypes.string,
         new: PropTypes.bool.isRequired,
@@ -69,6 +73,8 @@ class PostForm extends PureComponent {
         const { author, body } = this.state;
         const newPost = this.props.new;
 
+        // The following fields are needed for editing an existing post: body, ID, title
+        // The following fields are needed for submitting a new post: author, body, category, title
         return (
             <form className="form-horizontal" onSubmit={ this.handleSubmit }>
                 <div className="form-group">

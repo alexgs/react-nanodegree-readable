@@ -157,7 +157,7 @@ class ListView extends PureComponent {
                     </div>
                 </div>
                 { postSummaries }
-                <NewPostContainer categories={ undefined } submitFunction={ this.submitNewPost } />
+                <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
             </div>
         );
     }

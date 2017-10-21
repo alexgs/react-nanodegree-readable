@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PostForm from './Form';
 
 class NewPostContainer extends PureComponent {
     static propTypes = {
-        categories: PropTypes.any.isRequired,
+        categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
+            name: PropTypes.string.isRequired,
+            path: PropTypes.string.isRequired
+        } ) ).isRequired,
         submitFunction: PropTypes.func.isRequired
     };
 
