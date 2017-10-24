@@ -102,12 +102,19 @@ class DetailView extends PureComponent {
 
     constructor( props ) {
         super( props );
+
+        this.state = {
+            editPost: null
+        };
+
         this.deleteComment = this.deleteComment.bind( this );
         this.deletePost = this.deletePost.bind( this );
         this.downVoteComment = this.downVoteComment.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
         this.editComment = this.editComment.bind( this );
+        this.editPost = this.editPost.bind( this );
         this.submitComment = this.submitComment.bind( this );
+        this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.upVoteComment = this.upVoteComment.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
     }
@@ -132,12 +139,21 @@ class DetailView extends PureComponent {
         this.props.dispatch( editComment( commentId ) );
     }
 
+    editPost( postId ) {
+        this.setState( { editPost: postId } );
+    }
+
     submitComment( commentData, newComment=true ) {
         if ( newComment ) {
             handleNewCommentSubmit( commentData, this.props.dispatch );
         } else {
             handleEditCommentSubmit( commentData, this.props.dispatch );
         }
+    }
+
+    submitModifiedPost( postData ) {
+        this.setState( { editPost: null } );
+        // TODO
     }
 
     upVoteComment( commentId ) {
@@ -175,6 +191,7 @@ class DetailView extends PureComponent {
                         <CommentData commentCount={ commentCount } />
                         <EditDeleteButtons
                             deleteFunction={ this.deletePost }
+                            editFunction={ this.editPost }
                             targetId={ postId }
                         />
                     </FlexRow>

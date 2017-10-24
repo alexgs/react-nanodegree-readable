@@ -33,6 +33,7 @@ const titleStyle = {
 // TODO (1) List pages (root or category) include
 // TODO     (a) a mechanism for sorting by date or by score (at a minimum)
 // TODO     (b) the sort works properly
+// TODO (2) Connect "edit post" button
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
