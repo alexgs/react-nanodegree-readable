@@ -1,9 +1,24 @@
+import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import PostForm from './Form';
 
-class EditPost extends PureComponent {
+class EditPostContainer extends PureComponent {
+    static propTypes = {
+        body: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        submitFunction: PropTypes.func.isRequired,
+        title: PropTypes.string.isRequired
+    };
+
     render() {
-        return <h2>Edit Post</h2>
+        return <PostForm
+            body={ this.props.body }
+            id={ this.props.id }
+            new={ false }
+            submitFunction={ this.props.submitFunction }
+            title={ this.props.title }
+        />
     }
 }
 
-export default EditPost;
+export default EditPostContainer;

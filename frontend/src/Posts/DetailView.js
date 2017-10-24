@@ -6,7 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import uuid from 'uuid/v4';
 import Author from './Author';
 import CommentData from './CommentData';
-import EditDeleteButtons from '../Shared/EditDeleteButtons';
+import EditPostContainer from './EditPostContainer';
 import Title from './Title';
 import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
 import { getCommentCount } from './utils';
@@ -20,6 +20,7 @@ import {
     upVoteComment,
     updateExistingComment
 } from '../Comments/actions';
+import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
 import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_EDIT_COMMENT, STORE_POSTS_DATA } from '../constants';
@@ -152,8 +153,22 @@ class DetailView extends PureComponent {
     }
 
     submitModifiedPost( postData ) {
-        this.setState( { editPost: null } );
+        // `postData` is an object with the following fields: body, ID, title
+        const postDataSchema = {
+            body: _.isString,
+            id: _.isString,
+            title: _.isString
+        };
+        if ( !_.conformsTo( postData, postDataSchema ) ) {
+            throw new Error( `Illegal post data: ${ JSON.stringify( postData ) }` );
+        }
+
+        const { id, title } = postData;
+        console.log( `--> ${id} | ${title} <--` );
+
         // TODO
+        // this.props.dispatch( submitModifiedPost( postData ) );
+        this.setState( { editPost: null } );
     }
 
     upVoteComment( commentId ) {
@@ -170,31 +185,30 @@ class DetailView extends PureComponent {
 
     render() {
         const allPostData = this.props[ STORE_POSTS_DATA ];
+
+        // Data is not yet loaded, so bail on rendering
+        if ( allPostData.size === 0 ) {
+            return null;
+        }
+
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
         const commentData = this.props[ STORE_COMMENTS_DATA ];
         const editCommentId = this.props[ STORE_EDIT_COMMENT ];
-        if ( allPostData.size > 0 ) {
-            const postId = this.props.postId;
-            const postData = allPostData.get( postId );
-            const commentCount = getCommentCount( commentsByPost, commentData, postId );
+        const postId = this.props.postId;
+        const postData = allPostData.get( postId );
+        const commentCount = getCommentCount( commentsByPost, commentData, postId );
 
-            return (
-                <article className="row" style={ articleStyle }>
-                    <FlexRow>
-                        <Score
-                            downVoteFunction={ this.downVotePost }
-                            score={ postData.get( 'voteScore' ) }
-                            targetId={ postId }
-                            upVoteFunction={ this.upVotePost }
-                        />
-                        <Author author={ postData.get( 'author' ) } />
-                        <CommentData commentCount={ commentCount } />
-                        <EditDeleteButtons
-                            deleteFunction={ this.deletePost }
-                            editFunction={ this.editPost }
-                            targetId={ postId }
-                        />
-                    </FlexRow>
+        let postContent = null;
+        if ( postId === this.state.editPost ) {
+            postContent = <EditPostContainer
+                body={ postData.get( 'body' ) }
+                id={ postId }
+                submitFunction={ this.submitModifiedPost }
+                title={ postData.get( 'title' ) }
+            />
+        } else {
+            postContent = (
+                <div>
                     <div className="col-xs-12">
                         <Title
                             category={ postData.get( 'category' ) }
@@ -210,22 +224,41 @@ class DetailView extends PureComponent {
                             </content>
                         </div>
                     </div>
-                    <CommentList
-                        commentData={ commentData }
-                        commentList={ commentsByPost.get( postId ) }
-                        deleteFunction={ this.deleteComment }
-                        downVoteFunction={ this.downVoteComment }
-                        editCommentId={ editCommentId }
-                        editFunction={ this.editComment }
-                        submitFunction={ this.submitComment }
-                        upVoteFunction={ this.upVoteComment }
-                    />
-                    <NewCommentContainer parentId={ postId } submitFunction={ this.submitComment } />
-                </article>
-            );
-        } else {
-            return null;
+                </div>
+            )
         }
+
+        return (
+            <article className="row" style={ articleStyle }>
+                <FlexRow>
+                    <Score
+                        downVoteFunction={ this.downVotePost }
+                        score={ postData.get( 'voteScore' ) }
+                        targetId={ postId }
+                        upVoteFunction={ this.upVotePost }
+                    />
+                    <Author author={ postData.get( 'author' ) } />
+                    <CommentData commentCount={ commentCount } />
+                    <EditDeleteButtons
+                        deleteFunction={ this.deletePost }
+                        editFunction={ this.editPost }
+                        targetId={ postId }
+                    />
+                </FlexRow>
+                { postContent }
+                <CommentList
+                    commentData={ commentData }
+                    commentList={ commentsByPost.get( postId ) }
+                    deleteFunction={ this.deleteComment }
+                    downVoteFunction={ this.downVoteComment }
+                    editCommentId={ editCommentId }
+                    editFunction={ this.editComment }
+                    submitFunction={ this.submitComment }
+                    upVoteFunction={ this.upVoteComment }
+                />
+                <NewCommentContainer parentId={ postId } submitFunction={ this.submitComment } />
+            </article>
+        );
     }
 }
 
