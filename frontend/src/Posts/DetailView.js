@@ -8,8 +8,8 @@ import Author from './Author';
 import CommentData from './CommentData';
 import EditPostContainer from './EditPostContainer';
 import Title from './Title';
-import { deletePost, downloadPostsStart, downVotePost, upVotePost } from './actions';
-import { getCommentCount } from './utils';
+import { deletePost, downloadPostsStart, downVotePost, editPost, upVotePost } from './actions';
+import * as utils from './utils';
 import CommentList from '../Comments/CommentList';
 import NewCommentContainer from '../Comments/NewCommentContainer';
 import {
@@ -23,7 +23,10 @@ import {
 import EditDeleteButtons from '../Shared/EditDeleteButtons';
 import FlexRow from '../Shared/FlexRow';
 import Score from '../Shared/Score';
-import { STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_EDIT_COMMENT, STORE_POSTS_DATA } from '../constants';
+import {
+    STORE_COMMENTS_BY_POST, STORE_COMMENTS_DATA, STORE_EDIT_COMMENT, STORE_EDIT_POST,
+    STORE_POSTS_DATA
+} from '../constants';
 
 const articleStyle = {
     fontSize: '120%',
@@ -89,6 +92,8 @@ class DetailView extends PureComponent {
             timestamp: PropTypes.number,
             voteScore: PropTypes.number,
         } ).isRequired,
+        [STORE_EDIT_COMMENT]: PropTypes.string,
+        [STORE_EDIT_POST]: PropTypes.string,
         [STORE_POSTS_DATA]: ImmutablePropTypes.mapContains( {
             author: PropTypes.string,
             body: PropTypes.string,
@@ -104,9 +109,10 @@ class DetailView extends PureComponent {
     constructor( props ) {
         super( props );
 
-        this.state = {
-            editPost: null
-        };
+        // TODO +++ Move this into app state
+        // this.state = {
+        //     editPost: null
+        // };
 
         this.deleteComment = this.deleteComment.bind( this );
         this.deletePost = this.deletePost.bind( this );
@@ -141,7 +147,7 @@ class DetailView extends PureComponent {
     }
 
     editPost( postId ) {
-        this.setState( { editPost: postId } );
+        this.props.dispatch( editPost( postId ) );
     }
 
     submitComment( commentData, newComment=true ) {
@@ -154,21 +160,7 @@ class DetailView extends PureComponent {
 
     submitModifiedPost( postData ) {
         // `postData` is an object with the following fields: body, ID, title
-        const postDataSchema = {
-            body: _.isString,
-            id: _.isString,
-            title: _.isString
-        };
-        if ( !_.conformsTo( postData, postDataSchema ) ) {
-            throw new Error( `Illegal post data: ${ JSON.stringify( postData ) }` );
-        }
-
-        const { id, title } = postData;
-        console.log( `--> ${id} | ${title} <--` );
-
-        // TODO
-        // this.props.dispatch( submitModifiedPost( postData ) );
-        this.setState( { editPost: null } );
+        utils.submitModifiedPost( postData, this.props.dispatch );
     }
 
     upVoteComment( commentId ) {
@@ -194,12 +186,13 @@ class DetailView extends PureComponent {
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
         const commentData = this.props[ STORE_COMMENTS_DATA ];
         const editCommentId = this.props[ STORE_EDIT_COMMENT ];
+        const editPostId = this.props[ STORE_EDIT_POST ];
         const postId = this.props.postId;
         const postData = allPostData.get( postId );
-        const commentCount = getCommentCount( commentsByPost, commentData, postId );
+        const commentCount = utils.getCommentCount( commentsByPost, commentData, postId );
 
         let postContent = null;
-        if ( postId === this.state.editPost ) {
+        if ( postId === editPostId ) {
             postContent = <EditPostContainer
                 body={ postData.get( 'body' ) }
                 id={ postId }
@@ -267,6 +260,7 @@ const mapStateToProps = function( state ) {
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
         [STORE_EDIT_COMMENT]: state.get( STORE_EDIT_COMMENT),
+        [STORE_EDIT_POST]: state.get( STORE_EDIT_POST ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };
 };

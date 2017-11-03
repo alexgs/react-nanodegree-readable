@@ -4,6 +4,8 @@ import { downloadCommentsStart } from '../Comments/actions';
 import {
     DOWNLOAD_POSTS_COMPLETE,
     POST_DELETE_COMPLETE,
+    POST_START_EDIT,
+    POST_SUBMIT_MODIFIED_COMPLETE,
     POST_SUBMIT_NEW_COMPLETE,
     POST_VOTE_COMPLETE
 } from '../constants';
@@ -41,11 +43,23 @@ export const postsDataReducer = function( state=postsDataDefaultState, action ) 
                     store.dispatch( downloadCommentsStart( post.id ) );
                 } );
             } );
-        case POST_DELETE_COMPLETE:      // fall-through
-        case POST_SUBMIT_NEW_COMPLETE:  // fall-through
+        case POST_DELETE_COMPLETE:              // fall-through
+        case POST_SUBMIT_MODIFIED_COMPLETE:     // fall-through
+        case POST_SUBMIT_NEW_COMPLETE:          // fall-through
         case POST_VOTE_COMPLETE:
             const post = action.data;
             return state.set( post.id, Immutable.fromJS( post ) );
+        default:
+            return state;
+    }
+};
+
+export const postsEditReducer = function( state=null, action ) {
+    switch ( action.type ) {
+        case POST_START_EDIT:
+            return action.data;
+        case POST_SUBMIT_MODIFIED_COMPLETE:
+            return null;
         default:
             return state;
     }

@@ -8,7 +8,7 @@ import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
 import { deletePost, downloadPostsStart, downVotePost, submitNewPost, upVotePost } from './actions';
-import { getCommentCount } from './utils';
+import * as utils from './utils';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,
@@ -86,9 +86,9 @@ class ListView extends PureComponent {
         this.props.dispatch( downVotePost( postId ) );
     }
 
-    submitModifiedPost() {
-        // The following fields are needed for editing an existing post: body, ID, title
-        // TODO
+    submitModifiedPost( postData ) {
+        // `postData` is an object with the following fields: body, ID, title
+        utils.submitModifiedPost( postData, this.props.dispatch );
     }
 
     submitNewPost( postData ) {
@@ -120,6 +120,7 @@ class ListView extends PureComponent {
         this.props.dispatch( downloadPostsStart() );
     }
 
+    // TODO Enable editing of posts
     render() {
         const categoryId = this.props.category;
         const postData = this.props[ STORE_POSTS_DATA ];
@@ -151,7 +152,7 @@ class ListView extends PureComponent {
             .map( id => {
                 const data = postData.get( id );
                 const postId = data.get( 'id' );
-                const commentCount = getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
+                const commentCount = utils.getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
                 return (
                     <Summary
                         key={ postId }
