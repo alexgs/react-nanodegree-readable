@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { LIST_VIEW_SORT_DATE, LIST_VIEW_SORT_SCORE } from '../constants';
-import './SortButton.css';
+import './SortMenu.css';
 
 const caretStyle = {
     color: 'maroon'
@@ -36,7 +36,7 @@ const menuItemStyle = {
 
 // TODO Pre-render the menu to get the width of largest element
 // TODO Width and cursor of menu items
-class SortButton extends PureComponent {
+class SortMenu extends PureComponent {
     static propTypes = {
         changeSortModeFunction: PropTypes.func.isRequired,
         currentSortSetting: PropTypes.string.isRequired
@@ -132,4 +132,4 @@ class SortButton extends PureComponent {
     }
 }
 
-export default SortButton;
+export default SortMenu;

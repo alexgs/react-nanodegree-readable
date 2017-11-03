@@ -6,7 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
-import SortButton from './SortButton';
+import SortMenu from './SortMenu';
 import Summary from './Summary';
 import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, upVotePost } from './actions';
 import * as utils from './utils';
@@ -213,7 +213,7 @@ class ListView extends PureComponent {
                         <h2 style={ titleStyle }>{ title }</h2>
                     </div>
                     <div className="col-xs-4 text-right">
-                        <SortButton
+                        <SortMenu
                             changeSortModeFunction={ this.changeSortMode }
                             currentSortSetting={ this.state.sortMode }
                         />
