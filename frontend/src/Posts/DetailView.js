@@ -40,6 +40,13 @@ const titleStyle = {
     marginBottom: 5
 };
 
+const missingPostMessageStyle = {
+    fontSize: 24,
+    fontWeight: 'normal',
+    marginTop: titleStyle.marginTop,
+    marginBottom: titleStyle.marginBottom
+};
+
 // --- PRIVATE HELPER FUNCTIONS ---
 function handleNewCommentSubmit( commentData, dispatch ) {
     // Check that we have necessary data
@@ -184,8 +191,15 @@ class DetailView extends PureComponent {
         const editPostId = this.props[ STORE_EDIT_POST ];
         const postId = this.props.postId;
         const postData = allPostData.get( postId );
-        const commentCount = utils.getCommentCount( commentsByPost, commentData, postId );
 
+        // Post was deleted or it never existed; show a message and bail
+        if ( !postData || postData.get( 'deleted' ) ) {
+            return (
+                <div style={ missingPostMessageStyle }>Post "{postId}" not found</div>
+            );
+        }
+
+        const commentCount = utils.getCommentCount( commentsByPost, commentData, postId );
         let postContent = null;
         if ( postId === editPostId ) {
             postContent = <EditPostContainer
