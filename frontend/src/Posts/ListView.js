@@ -27,6 +27,11 @@ const categoryNameStyle = {
     fontSize: '120%',
 };
 
+const sortModes = [
+    LIST_VIEW_SORT_DATE,
+    LIST_VIEW_SORT_SCORE
+];
+
 const titleStyle = {
     fontSize: 20,
     fontWeight: 600,
@@ -74,12 +79,26 @@ class ListView extends PureComponent {
 
     constructor( props ) {
         super( props );
+        this.changeSortMode = this.changeSortMode.bind( this );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
         this.editPost = this.editPost.bind( this );
         this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
+
+        this.state = {
+            sortMode: LIST_VIEW_SORT_DATE
+        }
+    }
+
+    changeSortMode( sortMode ) {
+        if ( !_.includes( sortModes, sortMode ) ) {
+            throw new Error( `>>> ERROR Illegal sort mode: ${sortMode} <<<` );
+        }
+
+        console.log( `--{ new sort mode: ${sortMode} }--` );
+        this.setState( { sortMode } );
     }
 
     deletePost( postId ) {
@@ -194,7 +213,10 @@ class ListView extends PureComponent {
                         <h2 style={ titleStyle }>{ title }</h2>
                     </div>
                     <div className="col-xs-4 text-right">
-                        <SortButton currentSortSetting={ LIST_VIEW_SORT_SCORE } />
+                        <SortButton
+                            changeSortModeFunction={ this.changeSortMode }
+                            currentSortSetting={ this.state.sortMode }
+                        />
                     </div>
                 </div>
                 { postSummaries }

@@ -17,12 +17,14 @@ const dropdownButtonStyle = {
     color: 'maroon',
     fontWeight: 'bold',
     margin: '0 7px',
+    outline: 'none',
     padding: '0 10px',
     textShadow: 'none',
     textTransform: 'uppercase',
     verticalAlign: 'inherit'
 };
 
+// Adapted from Bootstrap's "btn-link" CSS class
 const menuItemStyle = {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
@@ -32,9 +34,11 @@ const menuItemStyle = {
     textTransform: 'uppercase'
 };
 
+// TODO Pre-render the menu to get the width of largest element
+// TODO Width and cursor of menu items
 class SortButton extends PureComponent {
     static propTypes = {
-        changeSortSettingFunction: PropTypes.func.isRequired,
+        changeSortModeFunction: PropTypes.func.isRequired,
         currentSortSetting: PropTypes.string.isRequired
     };
 
@@ -44,17 +48,50 @@ class SortButton extends PureComponent {
             showMenu: false
         };
 
-        this.menuButton = null;     // ref to dropdown menu button
+        this.dropdownMenu = null;           // ref to actual dropdown menu
+        this.menuButton = null;             // ref to dropdown menu button
 
+        this.handleDateClick = this.handleDateClick.bind( this );
+        this.handleOutsideClick = this.handleOutsideClick.bind( this );
+        this.handleScoreClick = this.handleScoreClick.bind( this );
         this.toggleMenu = this.toggleMenu.bind( this );
     }
 
+    handleDateClick() {
+        this.props.changeSortModeFunction( LIST_VIEW_SORT_DATE );
+        this.toggleMenu();
+    }
+
     // Handle clicks outside this component by closing the menu (https://larsgraubner.com/handle-outside-clicks-react)
+    handleOutsideClick( event ) {
+        // Ignore clicks on the components that have click-handlers
+        if ( this.dropdownMenu.contains( event.target ) || this.menuButton.contains( event.target ) ) {
+            return;
+        }
+
+        this.toggleMenu();
+    }
+
+    handleScoreClick() {
+        this.props.changeSortModeFunction( LIST_VIEW_SORT_SCORE );
+        this.toggleMenu();
+    }
 
     toggleMenu() {
-        const toggleValue = !this.state.showMenu;
-        // console.log( `--{ showMenu: ${toggleValue} }--` );
-        this.setState( { showMenu: toggleValue } );
+        const menuWillBeVisible = !this.state.showMenu;
+        console.log( `--{ Menu will be visible: ${menuWillBeVisible} }--` );
+
+        // If we're going to show the menu, attach a global event listener. Remove it when hiding the menu.
+        // The event listener handles outside clicks (https://larsgraubner.com/handle-outside-clicks-react)
+        if ( menuWillBeVisible ) {
+            document.addEventListener( 'click', this.handleOutsideClick, false );
+            console.log( `>-- Add event listener --<` );
+        } else {
+            document.removeEventListener( 'click', this.handleOutsideClick, false );
+            console.log( `>-- Remove event listener --<` );
+        }
+
+        this.setState( { showMenu: menuWillBeVisible } );
     }
 
     render() {
@@ -77,9 +114,17 @@ class SortButton extends PureComponent {
                 >
                     { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
                 </button>
-                <ul className="dropdown-menu" style={ dropdownStyle }>
-                    <li><button className="btn" style={ menuItemStyle }>highest score</button></li>
-                    <li><button className="btn" style={ menuItemStyle }>newest</button></li>
+                <ul className="dropdown-menu" style={ dropdownStyle } ref={ menu => this.dropdownMenu = menu }>
+                    <li>
+                        <button className="btn" onClick={ this.handleScoreClick } style={ menuItemStyle }>
+                            highest score
+                        </button>
+                    </li>
+                    <li>
+                        <button className="btn" onClick={ this.handleDateClick } style={ menuItemStyle }>
+                            newest
+                        </button>
+                    </li>
                 </ul>
                 first
             </div>
