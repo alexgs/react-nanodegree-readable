@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { LIST_VIEW_SORT_DATE, LIST_VIEW_SORT_SCORE } from '../constants';
@@ -50,16 +51,37 @@ class SortMenu extends PureComponent {
     constructor( props ) {
         super( props );
         this.state = {
+            preRenderComplete: false,
             showMenu: false
         };
 
         this.dropdownMenu = null;           // ref to actual dropdown menu
         this.menuButton = null;             // ref to dropdown menu button
+        this.preRenderBlock = null;         // ref to pre-render output
 
-        this.handleDateClick = this.handleDateClick.bind( this );
+        this.menuWidth = null;              // width of the menu, as calc'd in the pre-render stage
+
+        this.getButton = this.getButton.bind( this );
+        this.getMenu = this.getMenu.bind( this );
+        // this.handleDateClick = this.handleDateClick.bind( this );
+        this.handleMenuItemClick = this.handleMenuItemClick.bind( this );
         this.handleOutsideClick = this.handleOutsideClick.bind( this );
-        this.handleScoreClick = this.handleScoreClick.bind( this );
+        // this.handleScoreClick = this.handleScoreClick.bind( this );
         this.toggleMenu = this.toggleMenu.bind( this );
+    }
+
+    getButton( displayText, width='auto' ) {
+        const buttonStyle = _.merge( {}, menuButtonStyle, { width } );
+        return (
+            <button
+                className="btn btn-default"
+                onClick={ this.toggleMenu }
+                ref={ button => this.menuButton = button }
+                style={ buttonStyle }
+            >
+                { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
+            </button>
+        );
     }
 
     getMenu( dropdownMenuStyle ) {
@@ -83,10 +105,10 @@ class SortMenu extends PureComponent {
         );
     }
 
-    handleDateClick() {
-        this.props.changeSortModeFunction( LIST_VIEW_SORT_DATE );
-        this.toggleMenu();
-    }
+    // handleDateClick() {
+    //     this.props.changeSortModeFunction( LIST_VIEW_SORT_DATE );
+    //     this.toggleMenu();
+    // }
 
     handleMenuItemClick( sortMode ) {
         this.props.changeSortModeFunction( sortMode );
@@ -103,9 +125,25 @@ class SortMenu extends PureComponent {
         this.toggleMenu();
     }
 
-    handleScoreClick() {
-        this.props.changeSortModeFunction( LIST_VIEW_SORT_SCORE );
-        this.toggleMenu();
+    // handleScoreClick() {
+    //     this.props.changeSortModeFunction( LIST_VIEW_SORT_SCORE );
+    //     this.toggleMenu();
+    // }
+
+    preRender() {
+        const preRenderBlockStyle = {
+            position: 'absolute',
+            top: -1000
+        };
+
+        // This will put a lot of values in `this.menuButton`, but we aren't using the ref at this stage, so no worries
+        const buttons = _.map( displayTextValues, displayText => (
+            <div key={ displayText }>{ this.getButton( displayText ) }</div>
+        ) );
+
+        return (
+            <div style={ preRenderBlockStyle } ref={ block => this.preRenderBlock = block }>{ buttons }</div>
+        )
     }
 
     toggleMenu() {
@@ -122,30 +160,35 @@ class SortMenu extends PureComponent {
         this.setState( { showMenu: menuWillBeVisible } );
     }
 
+    componentDidMount() {
+        if ( !this.state.preRenderComplete ) {
+            const widestChild = _.maxBy( this.preRenderBlock.children, 'offsetWidth' );
+            this.menuWidth = widestChild.offsetWidth;
+            this.setState( { preRenderComplete: true } );
+        }
+    }
+
     render() {
+        if ( !this.state.preRenderComplete ) {
+            return this.preRender()
+        }
+
         const displayText = displayTextValues[ this.props.currentSortSetting ];
-        const dropdownMenuStyle = this.state.showMenu ? {
+        const dropdownMenuStyle = {
             display: 'block',
             left: this.menuButton.offsetLeft,
-            minWidth: this.menuButton.offsetWidth,
+            minWidth: this.menuWidth,
             padding: 0
-        } : null;
+        };
 
         const dropdownMenu = this.state.showMenu ? this.getMenu( dropdownMenuStyle ) : null;
 
         return (
             <div>
                 View
-                <button
-                    className="btn btn-default"
-                    onClick={ this.toggleMenu }
-                    ref={ button => this.menuButton = button }
-                    style={ menuButtonStyle }
-                >
-                    { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
-                </button>
-                { dropdownMenu }
+                { this.getButton( displayText, this.menuWidth ) }
                 first
+                { dropdownMenu }
             </div>
         );
     }
