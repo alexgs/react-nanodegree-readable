@@ -7,13 +7,14 @@ import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, submitNewPost, upVotePost } from './actions';
+import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, upVotePost } from './actions';
 import * as utils from './utils';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,
     STORE_COMMENTS_BY_POST,
     STORE_COMMENTS_DATA,
+    STORE_EDIT_POST,
     STORE_POSTS_BY_CATEGORY,
     STORE_POSTS_DATA
 } from '../constants';
@@ -33,7 +34,6 @@ const titleStyle = {
 // TODO (1) List pages (root or category) include
 // TODO     (a) a mechanism for sorting by date or by score (at a minimum)
 // TODO     (b) the sort works properly
-// TODO (2) Connect "edit post" button
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
@@ -73,6 +73,7 @@ class ListView extends PureComponent {
         super( props );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.editPost = this.editPost.bind( this );
         this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
@@ -84,6 +85,10 @@ class ListView extends PureComponent {
 
     downVotePost( postId ) {
         this.props.dispatch( downVotePost( postId ) );
+    }
+
+    editPost( postId ) {
+        this.props.dispatch( editPost( postId ) );
     }
 
     submitModifiedPost( postData ) {
@@ -120,10 +125,10 @@ class ListView extends PureComponent {
         this.props.dispatch( downloadPostsStart() );
     }
 
-    // TODO Enable editing of posts
     render() {
         const categoryId = this.props.category;
         const postData = this.props[ STORE_POSTS_DATA ];
+        const editPostId = this.props[ STORE_EDIT_POST ];
         let postIds = null;
         let title = null;
 
@@ -162,7 +167,10 @@ class ListView extends PureComponent {
                         commentCount={ commentCount }
                         deleteFunction={ this.deletePost }
                         downVoteFunction={ this.downVotePost }
+                        editFunction={ this.editPost }
+                        editPostId={ editPostId }
                         id={ postId }
+                        submitFunction={ this.submitModifiedPost }
                         timestamp={ data.get( 'timestamp' ) }
                         title={ data.get( 'title' ) }
                         upVoteFunction={ this.upVotePost }
@@ -170,6 +178,11 @@ class ListView extends PureComponent {
                     />
                 );
             } );
+
+        // Hide the new post form if the user is editing a post
+        const newPost = editPostId ? null : (
+            <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
+        );
 
         return (
             <div>
@@ -179,7 +192,7 @@ class ListView extends PureComponent {
                     </div>
                 </div>
                 { postSummaries }
-                <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
+                { newPost }
             </div>
         );
     }
@@ -190,6 +203,7 @@ const mapStateToProps = function( state ) {
         categories: state.get( STORE_CATEGORIES ),
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
+        [STORE_EDIT_POST]: state.get( STORE_EDIT_POST ),
         [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };

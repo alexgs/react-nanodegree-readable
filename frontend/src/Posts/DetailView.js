@@ -109,11 +109,6 @@ class DetailView extends PureComponent {
     constructor( props ) {
         super( props );
 
-        // TODO +++ Move this into app state
-        // this.state = {
-        //     editPost: null
-        // };
-
         this.deleteComment = this.deleteComment.bind( this );
         this.deletePost = this.deletePost.bind( this );
         this.downVoteComment = this.downVoteComment.bind( this );
