@@ -99,6 +99,7 @@ class ListView extends PureComponent {
 
         // console.log( `--{ new sort mode: ${sortMode} }--` );
         this.setState( { sortMode } );
+        // TODO Implement sorting
     }
 
     deletePost( postId ) {

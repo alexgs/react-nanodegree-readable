@@ -41,7 +41,6 @@ const menuItemStyle = {
     width: '100%'
 };
 
-// TODO Pre-render the menu to get the width of largest element
 class SortMenu extends PureComponent {
     static propTypes = {
         changeSortModeFunction: PropTypes.func.isRequired,
@@ -63,10 +62,8 @@ class SortMenu extends PureComponent {
 
         this.getButton = this.getButton.bind( this );
         this.getMenu = this.getMenu.bind( this );
-        // this.handleDateClick = this.handleDateClick.bind( this );
         this.handleMenuItemClick = this.handleMenuItemClick.bind( this );
         this.handleOutsideClick = this.handleOutsideClick.bind( this );
-        // this.handleScoreClick = this.handleScoreClick.bind( this );
         this.toggleMenu = this.toggleMenu.bind( this );
     }
 
@@ -105,11 +102,6 @@ class SortMenu extends PureComponent {
         );
     }
 
-    // handleDateClick() {
-    //     this.props.changeSortModeFunction( LIST_VIEW_SORT_DATE );
-    //     this.toggleMenu();
-    // }
-
     handleMenuItemClick( sortMode ) {
         this.props.changeSortModeFunction( sortMode );
         this.toggleMenu();
@@ -124,11 +116,6 @@ class SortMenu extends PureComponent {
 
         this.toggleMenu();
     }
-
-    // handleScoreClick() {
-    //     this.props.changeSortModeFunction( LIST_VIEW_SORT_SCORE );
-    //     this.toggleMenu();
-    // }
 
     preRender() {
         const preRenderBlockStyle = {
