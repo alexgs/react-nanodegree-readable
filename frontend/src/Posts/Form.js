@@ -11,7 +11,7 @@ class PostForm extends PureComponent {
         categories: ImmutablePropTypes.listOf( ImmutablePropTypes.mapContains( {
             name: PropTypes.string.isRequired,
             path: PropTypes.string.isRequired
-        } ) ).isRequired,
+        } ) ),
         category: PropTypes.any,
         id: PropTypes.string,
         new: PropTypes.bool.isRequired,
@@ -89,28 +89,30 @@ class PostForm extends PureComponent {
 
     render() {
         const { author, body, category, title } = this.state;
+
+        // Use anonymous closures to render fields on demand
         const fields = {
-            author: <TextInput
+            author: () => <TextInput
                 htmlId="post-author"
                 label="Your Name"
                 onChangeFunction={ this.handleAuthorInput }
                 placeholder="Name"
                 value={ author }
             />,
-            body: <TextInput
+            body: () => <TextInput
                 htmlId="post-body"
                 label="Post Content"
                 onChangeFunction={ this.handleBodyInput }
                 placeholder="Something insightful and constructive..."
                 value={ body }
             />,
-            category: <CategorySelector
+            category: () => <CategorySelector
                 categories={ this.props.categories }
                 htmlId="post-category"
                 onChangeFunction={ this.handleCategoryChange }
                 value={ category }
             />,
-            title: <TextInput
+            title: () => <TextInput
                 htmlId="post-title"
                 label="Title"
                 onChangeFunction={ this.handleTitleInput }
@@ -133,18 +135,18 @@ class PostForm extends PureComponent {
         if ( this.props.new ) {
             return (
                 <form className="form-horizontal" onSubmit={ this.handleSubmit }>
-                    { fields.author }
-                    { fields.title }
-                    { fields.body }
-                    { fields.category }
+                    { fields.author() }
+                    { fields.title() }
+                    { fields.body() }
+                    { fields.category() }
                     { buttons }
                 </form>
             );
         } else {
             return (
                 <form className="form-horizontal" onSubmit={ this.handleSubmit }>
-                    { fields.title }
-                    { fields.body }
+                    { fields.title() }
+                    { fields.body() }
                     { buttons }
                 </form>
             );

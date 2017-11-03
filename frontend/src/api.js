@@ -66,11 +66,23 @@ export const sendPostUpVote = function( postId ) {
 };
 
 export const sendUpdatedComment = function( commentData, commentId ) {
-    // commentData is an object with the following fields: body, timestamp
+    // `commentData` is an object with the following fields: body, timestamp
     const urlPath = '/comments/' + makeToken( 'commentId' );
     const urlOptions = { commentId };
     const requestOptions = {
         body: JSON.stringify( commentData ),
+        headers: HEADER_CONTENT_JSON,
+        method: 'PUT',
+    };
+    return requestWorker( urlPath, urlOptions, requestOptions );
+};
+
+export const sendUpdatedPost = function( postData, postId ) {
+    // `postData` is an object with the following fields: body, title
+    const urlPath = '/posts/' + makeToken( 'postId' );
+    const urlOptions = { postId };
+    const requestOptions = {
+        body: JSON.stringify( postData ),
         headers: HEADER_CONTENT_JSON,
         method: 'PUT',
     };

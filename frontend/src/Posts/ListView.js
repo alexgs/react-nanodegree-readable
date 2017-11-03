@@ -7,13 +7,14 @@ import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, submitNewPost, upVotePost } from './actions';
-import { getCommentCount } from './utils';
+import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, upVotePost } from './actions';
+import * as utils from './utils';
 import {
     CATEGORY_ALL,
     STORE_CATEGORIES,
     STORE_COMMENTS_BY_POST,
     STORE_COMMENTS_DATA,
+    STORE_EDIT_POST,
     STORE_POSTS_BY_CATEGORY,
     STORE_POSTS_DATA
 } from '../constants';
@@ -72,6 +73,7 @@ class ListView extends PureComponent {
         super( props );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
+        this.editPost = this.editPost.bind( this );
         this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
@@ -85,9 +87,13 @@ class ListView extends PureComponent {
         this.props.dispatch( downVotePost( postId ) );
     }
 
-    submitModifiedPost() {
-        // The following fields are needed for editing an existing post: body, ID, title
-        // TODO
+    editPost( postId ) {
+        this.props.dispatch( editPost( postId ) );
+    }
+
+    submitModifiedPost( postData ) {
+        // `postData` is an object with the following fields: body, ID, title
+        utils.submitModifiedPost( postData, this.props.dispatch );
     }
 
     submitNewPost( postData ) {
@@ -122,6 +128,7 @@ class ListView extends PureComponent {
     render() {
         const categoryId = this.props.category;
         const postData = this.props[ STORE_POSTS_DATA ];
+        const editPostId = this.props[ STORE_EDIT_POST ];
         let postIds = null;
         let title = null;
 
@@ -150,7 +157,7 @@ class ListView extends PureComponent {
             .map( id => {
                 const data = postData.get( id );
                 const postId = data.get( 'id' );
-                const commentCount = getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
+                const commentCount = utils.getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
                 return (
                     <Summary
                         key={ postId }
@@ -160,7 +167,10 @@ class ListView extends PureComponent {
                         commentCount={ commentCount }
                         deleteFunction={ this.deletePost }
                         downVoteFunction={ this.downVotePost }
+                        editFunction={ this.editPost }
+                        editPostId={ editPostId }
                         id={ postId }
+                        submitFunction={ this.submitModifiedPost }
                         timestamp={ data.get( 'timestamp' ) }
                         title={ data.get( 'title' ) }
                         upVoteFunction={ this.upVotePost }
@@ -168,6 +178,11 @@ class ListView extends PureComponent {
                     />
                 );
             } );
+
+        // Hide the new post form if the user is editing a post
+        const newPost = editPostId ? null : (
+            <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
+        );
 
         return (
             <div>
@@ -177,7 +192,7 @@ class ListView extends PureComponent {
                     </div>
                 </div>
                 { postSummaries }
-                <NewPostContainer categories={ this.props.categories } submitFunction={ this.submitNewPost } />
+                { newPost }
             </div>
         );
     }
@@ -188,6 +203,7 @@ const mapStateToProps = function( state ) {
         categories: state.get( STORE_CATEGORIES ),
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
+        [STORE_EDIT_POST]: state.get( STORE_EDIT_POST ),
         [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };
