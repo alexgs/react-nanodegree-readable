@@ -97,6 +97,7 @@ class ListView extends PureComponent {
             throw new Error( `>>> ERROR Illegal sort mode: ${sortMode} <<<` );
         }
 
+        // console.log( `--{ new sort mode: ${sortMode} }--` );
         this.setState( { sortMode } );
     }
 

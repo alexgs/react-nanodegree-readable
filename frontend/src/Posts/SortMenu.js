@@ -3,6 +3,11 @@ import React, { PureComponent } from 'react';
 import { LIST_VIEW_SORT_DATE, LIST_VIEW_SORT_SCORE } from '../constants';
 import './SortMenu.css';
 
+import map from 'lodash/fp/map';
+import flow from 'lodash/fp/flow';
+import sortBy from 'lodash/fp/sortBy';
+import toPairs from 'lodash/fp/toPairs';
+
 const caretStyle = {
     color: 'maroon'
 };
@@ -57,8 +62,34 @@ class SortMenu extends PureComponent {
         this.toggleMenu = this.toggleMenu.bind( this );
     }
 
+    getMenu( dropdownMenuStyle ) {
+        const menuItems = flow(
+            toPairs,
+            map( pair => ({ displayText: pair[1], sortMode: pair[0] }) ),
+            sortBy( o => o.displayText ),
+            map( ({ displayText, sortMode }) => (
+                <li key={ sortMode }>
+                    <button className="btn" onClick={ () => this.handleMenuItemClick( sortMode ) } style={ menuItemStyle }>
+                        { displayText }
+                    </button>
+                </li>
+            ) )
+        )( displayTextValues );
+
+        return (
+            <ul className="dropdown-menu" style={ dropdownMenuStyle } ref={ menu => this.dropdownMenu = menu }>
+                { menuItems }
+            </ul>
+        );
+    }
+
     handleDateClick() {
         this.props.changeSortModeFunction( LIST_VIEW_SORT_DATE );
+        this.toggleMenu();
+    }
+
+    handleMenuItemClick( sortMode ) {
+        this.props.changeSortModeFunction( sortMode );
         this.toggleMenu();
     }
 
@@ -100,6 +131,8 @@ class SortMenu extends PureComponent {
             padding: 0
         } : null;
 
+        const dropdownMenu = this.state.showMenu ? this.getMenu( dropdownMenuStyle ) : null;
+
         return (
             <div>
                 View
@@ -111,18 +144,7 @@ class SortMenu extends PureComponent {
                 >
                     { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
                 </button>
-                <ul className="dropdown-menu" style={ dropdownMenuStyle } ref={ menu => this.dropdownMenu = menu }>
-                    <li>
-                        <button className="btn" onClick={ this.handleScoreClick } style={ menuItemStyle }>
-                            highest score
-                        </button>
-                    </li>
-                    <li>
-                        <button className="btn" onClick={ this.handleDateClick } style={ menuItemStyle }>
-                            newest
-                        </button>
-                    </li>
-                </ul>
+                { dropdownMenu }
                 first
             </div>
         );
