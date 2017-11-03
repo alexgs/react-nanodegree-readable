@@ -12,7 +12,7 @@ const displayTextValues = {
     [LIST_VIEW_SORT_SCORE]: 'highest score'
 };
 
-const dropdownButtonStyle = {
+const menuButtonStyle = {
     backgroundImage: 'none',
     color: 'maroon',
     fontWeight: 'bold',
@@ -31,11 +31,11 @@ const menuItemStyle = {
     boxShadow: 'none',
     color: 'maroon',
     fontWeight: 'bold',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    width: '100%'
 };
 
 // TODO Pre-render the menu to get the width of largest element
-// TODO Width and cursor of menu items
 class SortMenu extends PureComponent {
     static propTypes = {
         changeSortModeFunction: PropTypes.func.isRequired,
@@ -79,16 +79,13 @@ class SortMenu extends PureComponent {
 
     toggleMenu() {
         const menuWillBeVisible = !this.state.showMenu;
-        console.log( `--{ Menu will be visible: ${menuWillBeVisible} }--` );
 
         // If we're going to show the menu, attach a global event listener. Remove it when hiding the menu.
         // The event listener handles outside clicks (https://larsgraubner.com/handle-outside-clicks-react)
         if ( menuWillBeVisible ) {
             document.addEventListener( 'click', this.handleOutsideClick, false );
-            console.log( `>-- Add event listener --<` );
         } else {
             document.removeEventListener( 'click', this.handleOutsideClick, false );
-            console.log( `>-- Remove event listener --<` );
         }
 
         this.setState( { showMenu: menuWillBeVisible } );
@@ -96,7 +93,7 @@ class SortMenu extends PureComponent {
 
     render() {
         const displayText = displayTextValues[ this.props.currentSortSetting ];
-        const dropdownStyle = this.state.showMenu ? {
+        const dropdownMenuStyle = this.state.showMenu ? {
             display: 'block',
             left: this.menuButton.offsetLeft,
             minWidth: this.menuButton.offsetWidth,
@@ -110,11 +107,11 @@ class SortMenu extends PureComponent {
                     className="btn btn-default"
                     onClick={ this.toggleMenu }
                     ref={ button => this.menuButton = button }
-                    style={ dropdownButtonStyle }
+                    style={ menuButtonStyle }
                 >
                     { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
                 </button>
-                <ul className="dropdown-menu" style={ dropdownStyle } ref={ menu => this.dropdownMenu = menu }>
+                <ul className="dropdown-menu" style={ dropdownMenuStyle } ref={ menu => this.dropdownMenu = menu }>
                     <li>
                         <button className="btn" onClick={ this.handleScoreClick } style={ menuItemStyle }>
                             highest score
