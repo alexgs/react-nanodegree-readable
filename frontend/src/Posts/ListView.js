@@ -12,6 +12,8 @@ import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, 
 import * as utils from './utils';
 import {
     CATEGORY_ALL,
+    LIST_VIEW_SORT_DATE,
+    LIST_VIEW_SORT_SCORE,
     STORE_CATEGORIES,
     STORE_COMMENTS_BY_POST,
     STORE_COMMENTS_DATA,
@@ -192,7 +194,7 @@ class ListView extends PureComponent {
                         <h2 style={ titleStyle }>{ title }</h2>
                     </div>
                     <div className="col-xs-4 text-right">
-                        <SortButton />
+                        <SortButton currentSortSetting={ LIST_VIEW_SORT_SCORE } />
                     </div>
                 </div>
                 { postSummaries }

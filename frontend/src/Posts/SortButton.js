@@ -1,8 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import { LIST_VIEW_SORT_DATE, LIST_VIEW_SORT_SCORE } from '../constants';
+import './SortButton.css';
 
 const caretStyle = {
     color: 'maroon'
+};
+
+const displayTextValues = {
+    [LIST_VIEW_SORT_DATE]: 'newest',
+    [LIST_VIEW_SORT_SCORE]: 'highest score'
 };
 
 const dropdownButtonStyle = {
@@ -16,9 +23,19 @@ const dropdownButtonStyle = {
     verticalAlign: 'inherit'
 };
 
+const menuItemStyle = {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    boxShadow: 'none',
+    color: 'maroon',
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
+};
+
 class SortButton extends PureComponent {
     static propTypes = {
-
+        changeSortSettingFunction: PropTypes.func.isRequired,
+        currentSortSetting: PropTypes.string.isRequired
     };
 
     constructor( props ) {
@@ -36,15 +53,17 @@ class SortButton extends PureComponent {
 
     toggleMenu() {
         const toggleValue = !this.state.showMenu;
-        console.log( `--{ showMenu: ${toggleValue} }--` );
+        // console.log( `--{ showMenu: ${toggleValue} }--` );
         this.setState( { showMenu: toggleValue } );
     }
 
     render() {
+        const displayText = displayTextValues[ this.props.currentSortSetting ];
         const dropdownStyle = this.state.showMenu ? {
             display: 'block',
             left: this.menuButton.offsetLeft,
-            minWidth: this.menuButton.offsetWidth
+            minWidth: this.menuButton.offsetWidth,
+            padding: 0
         } : null;
 
         return (
@@ -56,11 +75,11 @@ class SortButton extends PureComponent {
                     ref={ button => this.menuButton = button }
                     style={ dropdownButtonStyle }
                 >
-                    highest score <span className="fa fa-caret-down" style={ caretStyle } />
+                    { displayText } <span className="fa fa-caret-down" style={ caretStyle } />
                 </button>
                 <ul className="dropdown-menu" style={ dropdownStyle }>
-                    <li><button className="btn btn-link">highest score</button></li>
-                    <li><button className="btn btn-link">newest</button></li>
+                    <li><button className="btn" style={ menuItemStyle }>highest score</button></li>
+                    <li><button className="btn" style={ menuItemStyle }>newest</button></li>
                 </ul>
                 first
             </div>

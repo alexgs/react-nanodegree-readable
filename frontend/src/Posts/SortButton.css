@@ -1,0 +1,8 @@
+.dropdown-menu > li:focus,
+.dropdown-menu > li:hover {
+    background-color: #e8e8e8;
+}
+
+.dropdown-menu > li > button.btn:focus {
+    outline: none;
+}
