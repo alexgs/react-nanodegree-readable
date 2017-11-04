@@ -6,15 +6,27 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
+import SortMenu from './SortMenu';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, upVotePost } from './actions';
+import {
+    deletePost,
+    downloadPostsStart,
+    downVotePost,
+    editPost,
+    setListViewSortMode,
+    submitNewPost,
+    upVotePost
+} from './actions';
 import * as utils from './utils';
 import {
     CATEGORY_ALL,
+    LIST_VIEW_SORT_DATE,
+    LIST_VIEW_SORT_SCORE,
     STORE_CATEGORIES,
     STORE_COMMENTS_BY_POST,
     STORE_COMMENTS_DATA,
     STORE_EDIT_POST,
+    STORE_LIST_VIEW_SORT_MODE,
     STORE_POSTS_BY_CATEGORY,
     STORE_POSTS_DATA
 } from '../constants';
@@ -24,6 +36,11 @@ const categoryNameStyle = {
     fontSize: '120%',
 };
 
+const sortModes = [
+    LIST_VIEW_SORT_DATE,
+    LIST_VIEW_SORT_SCORE
+];
+
 const titleStyle = {
     fontSize: 20,
     fontWeight: 600,
@@ -31,9 +48,24 @@ const titleStyle = {
     textTransform: 'uppercase'
 };
 
-// TODO (1) List pages (root or category) include
-// TODO     (a) a mechanism for sorting by date or by score (at a minimum)
-// TODO     (b) the sort works properly
+const sortPostsByDate = function( postA, postB ) {
+    const dateField = 'timestamp';
+    const dateA = postA.get( dateField );
+    const dateB = postB.get( dateField );
+
+    // Return negative number if A should come first
+    return dateB - dateA;
+};
+
+const sortPostsByScore = function( postA, postB ) {
+    const scoreField = 'voteScore';
+    const scoreA = postA.get( scoreField );
+    const scoreB = postB.get( scoreField );
+
+    // Return negative number if A should come first
+    return scoreB - scoreA;
+};
+
 class ListView extends PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
@@ -71,12 +103,20 @@ class ListView extends PureComponent {
 
     constructor( props ) {
         super( props );
+        this.changeSortMode = this.changeSortMode.bind( this );
         this.deletePost = this.deletePost.bind( this );
         this.downVotePost = this.downVotePost.bind( this );
         this.editPost = this.editPost.bind( this );
         this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
+    }
+
+    changeSortMode( sortMode ) {
+        if ( !_.includes( sortModes, sortMode ) ) {
+            throw new Error( `>>> ERROR Illegal sort mode: ${sortMode} <<<` );
+        }
+        this.props.dispatch( setListViewSortMode( sortMode ) );
     }
 
     deletePost( postId ) {
@@ -127,6 +167,7 @@ class ListView extends PureComponent {
 
     render() {
         const categoryId = this.props.category;
+        const currentSortMode = this.props[ STORE_LIST_VIEW_SORT_MODE ];
         const postData = this.props[ STORE_POSTS_DATA ];
         const editPostId = this.props[ STORE_EDIT_POST ];
         let postIds = null;
@@ -149,13 +190,12 @@ class ListView extends PureComponent {
         }
 
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const postSummaries = postIds
-            .filter( id => {
-                const data = postData.get( id );
-                return !data.get( 'deleted' );
-            } )
-            .map( id => {
-                const data = postData.get( id );
+        const sortFunction = ( currentSortMode === LIST_VIEW_SORT_SCORE ) ? sortPostsByScore : sortPostsByDate;
+        const postSummaries = postIds               // TODO [Nice] Refactor to remove `postIds` variable?
+            .map( id => postData.get( id ) )
+            .filter( data => !data.get( 'deleted' ) )
+            .sort( sortFunction )
+            .map( data => {
                 const postId = data.get( 'id' );
                 const commentCount = utils.getCommentCount( commentsByPost, this.props[ STORE_COMMENTS_DATA ], postId );
                 return (
@@ -187,8 +227,14 @@ class ListView extends PureComponent {
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-xs-8">
                         <h2 style={ titleStyle }>{ title }</h2>
+                    </div>
+                    <div className="col-xs-4 text-right">
+                        <SortMenu
+                            changeSortModeFunction={ this.changeSortMode }
+                            currentSortMode={ currentSortMode }
+                        />
                     </div>
                 </div>
                 { postSummaries }
@@ -204,6 +250,7 @@ const mapStateToProps = function( state ) {
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
         [STORE_EDIT_POST]: state.get( STORE_EDIT_POST ),
+        [STORE_LIST_VIEW_SORT_MODE]: state.get( STORE_LIST_VIEW_SORT_MODE ),
         [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };

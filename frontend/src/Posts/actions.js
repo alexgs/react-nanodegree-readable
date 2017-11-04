@@ -7,7 +7,8 @@ import {
     POST_START_EDIT,
     POST_SUBMIT_MODIFIED_COMPLETE,
     POST_SUBMIT_NEW_COMPLETE,
-    POST_VOTE_COMPLETE
+    POST_VOTE_COMPLETE,
+    SET_LIST_VIEW_SORT_MODE
 } from '../constants';
 
 export const deletePost = function( postId ) {
@@ -59,6 +60,13 @@ export const postVoteComplete = function( postData ) {
     return {
         type: POST_VOTE_COMPLETE,
         data: postData
+    };
+};
+
+export const setListViewSortMode = function( newSortMode ) {
+    return {
+        type: SET_LIST_VIEW_SORT_MODE,
+        data: newSortMode
     };
 };
 
