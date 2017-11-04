@@ -8,7 +8,15 @@ import uuid from 'uuid/v4';
 import NewPostContainer from './NewPostContainer';
 import SortMenu from './SortMenu';
 import Summary from './Summary';
-import { deletePost, downloadPostsStart, downVotePost, editPost, submitNewPost, upVotePost } from './actions';
+import {
+    deletePost,
+    downloadPostsStart,
+    downVotePost,
+    editPost,
+    setListViewSortMode,
+    submitNewPost,
+    upVotePost
+} from './actions';
 import * as utils from './utils';
 import {
     CATEGORY_ALL,
@@ -18,6 +26,7 @@ import {
     STORE_COMMENTS_BY_POST,
     STORE_COMMENTS_DATA,
     STORE_EDIT_POST,
+    STORE_LIST_VIEW_SORT_MODE,
     STORE_POSTS_BY_CATEGORY,
     STORE_POSTS_DATA
 } from '../constants';
@@ -101,19 +110,13 @@ class ListView extends PureComponent {
         this.submitModifiedPost = this.submitModifiedPost.bind( this );
         this.submitNewPost = this.submitNewPost.bind( this );
         this.upVotePost = this.upVotePost.bind( this );
-
-        this.state = {
-            sortMode: LIST_VIEW_SORT_DATE
-        }
     }
 
     changeSortMode( sortMode ) {
         if ( !_.includes( sortModes, sortMode ) ) {
             throw new Error( `>>> ERROR Illegal sort mode: ${sortMode} <<<` );
         }
-
-        // TODO Move to app state
-        this.setState( { sortMode } );
+        this.props.dispatch( setListViewSortMode( sortMode ) );
     }
 
     deletePost( postId ) {
@@ -164,6 +167,7 @@ class ListView extends PureComponent {
 
     render() {
         const categoryId = this.props.category;
+        const currentSortMode = this.props[ STORE_LIST_VIEW_SORT_MODE ];
         const postData = this.props[ STORE_POSTS_DATA ];
         const editPostId = this.props[ STORE_EDIT_POST ];
         let postIds = null;
@@ -186,7 +190,7 @@ class ListView extends PureComponent {
         }
 
         const commentsByPost = this.props[ STORE_COMMENTS_BY_POST ];
-        const sortFunction = ( this.state.sortMode === LIST_VIEW_SORT_SCORE ) ? sortPostsByScore : sortPostsByDate;
+        const sortFunction = ( currentSortMode === LIST_VIEW_SORT_SCORE ) ? sortPostsByScore : sortPostsByDate;
         const postSummaries = postIds               // TODO [Nice] Refactor to remove `postIds` variable?
             .map( id => postData.get( id ) )
             .filter( data => !data.get( 'deleted' ) )
@@ -229,7 +233,7 @@ class ListView extends PureComponent {
                     <div className="col-xs-4 text-right">
                         <SortMenu
                             changeSortModeFunction={ this.changeSortMode }
-                            currentSortSetting={ this.state.sortMode }
+                            currentSortMode={ currentSortMode }
                         />
                     </div>
                 </div>
@@ -246,6 +250,7 @@ const mapStateToProps = function( state ) {
         [STORE_COMMENTS_BY_POST]: state.get( STORE_COMMENTS_BY_POST ),
         [STORE_COMMENTS_DATA]: state.get( STORE_COMMENTS_DATA ),
         [STORE_EDIT_POST]: state.get( STORE_EDIT_POST ),
+        [STORE_LIST_VIEW_SORT_MODE]: state.get( STORE_LIST_VIEW_SORT_MODE ),
         [STORE_POSTS_BY_CATEGORY]: state.get( STORE_POSTS_BY_CATEGORY ),
         [STORE_POSTS_DATA]: state.get( STORE_POSTS_DATA )
     };

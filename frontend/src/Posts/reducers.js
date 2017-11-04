@@ -3,15 +3,26 @@ import store from '../store';
 import { downloadCommentsStart } from '../Comments/actions';
 import {
     DOWNLOAD_POSTS_COMPLETE,
+    LIST_VIEW_SORT_DATE,
     POST_DELETE_COMPLETE,
     POST_START_EDIT,
     POST_SUBMIT_MODIFIED_COMPLETE,
     POST_SUBMIT_NEW_COMPLETE,
-    POST_VOTE_COMPLETE
+    POST_VOTE_COMPLETE,
+    SET_LIST_VIEW_SORT_MODE
 } from '../constants';
 
 const postsByCategoryDefaultState = Immutable.Map();
 const postsDataDefaultState = Immutable.Map();
+
+export const listViewSortModeReducer = function( state=LIST_VIEW_SORT_DATE, action ) {
+    switch( action.type ) {
+        case SET_LIST_VIEW_SORT_MODE:
+            return action.data;
+        default:
+            return state;
+    }
+};
 
 export const postsByCategoryReducer = function( state=postsByCategoryDefaultState, action ) {
     switch( action.type ) {

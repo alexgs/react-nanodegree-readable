@@ -44,7 +44,7 @@ const menuItemStyle = {
 class SortMenu extends PureComponent {
     static propTypes = {
         changeSortModeFunction: PropTypes.func.isRequired,
-        currentSortSetting: PropTypes.string.isRequired
+        currentSortMode: PropTypes.string.isRequired
     };
 
     constructor( props ) {
@@ -160,7 +160,7 @@ class SortMenu extends PureComponent {
             return this.preRender()
         }
 
-        const displayText = displayTextValues[ this.props.currentSortSetting ];
+        const displayText = displayTextValues[ this.props.currentSortMode ];
         const dropdownMenuStyle = {
             display: 'block',
             left: this.menuButton.offsetLeft,
