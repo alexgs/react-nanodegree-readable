@@ -18,12 +18,14 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "cypress": "^3.1.0",
     "react-scripts": "^1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "build": "react-scripts build",
+    "cypress:open": "cypress open",
     "eject": "react-scripts eject"
   }
 }
